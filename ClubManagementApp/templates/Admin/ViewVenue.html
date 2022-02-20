@@ -1,0 +1,35 @@
+{% extends 'Admin/AdminMaster.html' %}
+
+{% block page_content %}
+
+<div class="container">
+<table class="table table-striped">
+<tr>
+    <th></th>
+    <th>Venue Name</th>
+    <th>Type</th>
+    
+    <th>Contact</th>
+    <th>Email</th>
+    <th>Block Pic</th>
+</tr>
+{% for venue in venues %}
+
+<tr>
+    <td><img src="{{venue.venue_pic.url}}" class="img img-rounded"> </td>
+    <td>{{venue.venue_name|title}}</td>
+  
+    <td>{{venue.venue_type|capfirst}}</td>
+
+    <td>{{venue.venue_contact}}</td>
+    <td>{{venue.venue_email}}</td>
+   
+    
+    <td><a href="{% url 'club_management:view_block' venue.venue_id %}" target="_blank">Block Details</a></td>
+   
+</tr>
+
+{% endfor %}
+</table>
+</div>
+{% endblock %}

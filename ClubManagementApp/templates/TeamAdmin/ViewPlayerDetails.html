@@ -1,0 +1,53 @@
+{% extends 'TeamAdmin/TeamAdminMaster.html' %}
+
+{% block content%}
+    <h3 class="text-danger">Player Details</h3>
+    <img src="{{player.player_img.url}}" class="mg img-circle " style="height: 150px; width: 150px;">
+<table class="player-details  table table-striped">
+    <!-- <tr>
+        
+        <td></td>
+    </tr> -->
+    <tr>
+        <td>Player Name</td>
+        <td>{{player.player_name|title}}</td>
+    </tr>
+    <tr>
+        <td>Player Position</td>
+        <td>{{player.player_position|title}}</td>
+    </tr>
+    <tr>
+        <td>Height</td>
+        <td>{{player.player_height}} cm</td>
+    </tr>
+    <tr>
+        <td>Weight</td>
+        <td>{{player.player_weight}} Kg</td>
+    </tr>
+    <tr>
+        <td>Email</td>
+        <td>{{player.player_email}}</td>
+    </tr>
+    <tr>
+        <td>D.O.B</td>
+        <td>{{player.player_dob}}</td>
+    </tr>
+    <tr>
+        <td>Address</td>
+        <td>{{player.player_address|capfirst}}</td>
+    </tr>
+    <tr>
+        <td>Email</td>
+        <td>{{player.player_email}}</td>
+    </tr>
+    <tr>
+        <td>Phone No</td>
+        <td>{{player.player_ph}}</td>
+    </tr>
+
+</table>
+
+
+{% endblock %}
+
+

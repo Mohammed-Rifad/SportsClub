@@ -1,0 +1,95 @@
+{% extends 'Admin/AdminMaster.html' %}
+
+{% block page_content %}
+    <form action="{% url 'club_management:add_sport' %}" method="POST" class ="f1"  >
+        {% csrf_token %}
+    
+        <table class ="tb">
+            <tr>
+                <td>{{form.sport_name.label}}</td>
+                <td>{{form.sport_name}}</td>
+                
+            </tr>
+
+            <tr>
+                <td>{{form.sport_type.label}}</td>
+                <td>{{form.sport_type}}</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="submit" value="Submit" class="btn btn-primary"/>
+                   </td>
+               
+            </tr>
+            <tr><td><td> {% if form.errors %}
+                {% for field in form %}
+                {% for error in field.errors %}
+                <div class="alert alert-danger" id="form-error">
+                    <strong>{{ error|escape }}</strong>
+                </div>
+                {% endfor %}
+                {% endfor %}
+                {% for error in form.non_field_errors %}
+                <div class="alert alert-danger" id="form-error">
+                    <strong>{{ error|escape }}</strong>
+                </div>
+                {% endfor %}
+                {% endif %}
+                {% if success_msg %}
+                <p class="alert alert-success alt"  id="msg">{{success_msg}}</p>
+                {% endif %}
+                {% if error_msg %}
+                <p class="alert alert-danger alt" id="msg">{{error_msg}}</p>
+                {% endif %}</td></tr>
+        </table>
+   
+
+
+</form>
+
+{% if sports %}
+<form class="f1">
+    <table class="tb">
+        <thead>
+            <tr>
+                <th>Sports Name</th>
+                <th>Type</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for sport in sports %}
+            <tr>
+                <td>
+                {{sport.sport_name|capfirst}}
+                </td>
+                <td>
+                    {{sport.sport_type|capfirst}}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        
+    </table>
+</form>
+
+{% else %}
+<p>No Data Found</p>
+{% endif %}
+<script>
+    $(document).ready(function(){
+  $("#id_sport_name").focus(function(){
+   document.getElementById("id_sport_name").value="";
+  document.getElementById("msg").innerHTML="";
+ 
+   
+   
+  }
+  
+  
+  );
+
+ 
+  
+});
+</script>
+{% endblock %}

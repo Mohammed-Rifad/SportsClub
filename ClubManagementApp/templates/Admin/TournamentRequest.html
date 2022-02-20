@@ -1,0 +1,45 @@
+{% extends 'Admin/AdminMaster.html' %}
+
+{% block page_content %}
+
+
+<form action="" method="POST" class="f1">
+    
+    <table style="border-spacing: 10px;border-collapse: separate;">
+        <tr class="h4">
+            <td>Select Tournament</td>
+            <td><select name="" class="form-control" id="">
+                {% for t in t_data %}
+                <option value="">{{t.tournament_title|title}}</option>
+                {% endfor %}
+            </select></td>
+
+             
+        </tr>
+        <tr>
+            <td></td>
+            <td><input type="submit" class="btn btn-primary" value="Search" name="search" id=""></td>
+        </tr>
+    </table>
+
+    </form>
+
+
+<form action="" method="POST" class="f1">
+
+    <table style="border-spacing: 10px;border-collapse: separate;">
+        <tr class="h4">
+            <td>Tournament</td>
+            <td>Team Name</td>
+
+             
+        </tr>
+        {% for t in team_reg %}
+        <tr>
+            
+        </tr>
+        {% endfor %}
+    </table>
+
+    </form>
+{% endblock %}

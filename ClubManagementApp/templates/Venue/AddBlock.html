@@ -1,0 +1,41 @@
+{% extends 'Venue/VenueMaster.html' %}
+
+{% block content%}
+       <form action="{% url 'club_management:add_block' %}" method=POST>
+           {% csrf_token %}
+<table class="form-table">
+    <tr>
+        <td>
+            {{form.block_title.label}}
+        </td>
+        <td>
+            {{form.block_title}}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            {{form.amount.label}}
+        </td>
+        <td>
+            {{form.amount}}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            {{form.total_seats.label}}
+        </td>
+        <td>
+            {{form.total_seats}}
+        </td>
+    </tr>
+    <tr>
+        <td></td>
+        <td><input type="submit" value="Add" class="btn btn-primary"></td>
+    </tr>
+</table>
+{{msg}}
+
+       </form>
+{% endblock %}
+
+

@@ -1,0 +1,31 @@
+{% extends 'Admin/AdminMaster.html' %}
+
+{% block page_content %}
+
+<table class="table table-striped">
+<tr>
+    <th></th>
+    <th>Team Name</th>
+    <th>Team ID</th>
+    <th>Type</th>
+    <th>Place</th>
+    <th>Email</th>
+    <th>Phone No</th>
+</tr>
+{% for team in teams %}
+
+<tr>
+    <td><img src="{{team.team_logo.url}}" class="img img-rounded"> </td>
+    <td>{{team.team_name|title}}</td>
+    <td>{{team.team_user_id}}</td>
+    <td>{{team.team_type.sport_type|title}}</td>
+    <td>{{team.team_place|title}}</td>
+    <td>{{team.team_email}}</td>
+    <td>{{team.team_phno}}</td>
+   <td> <a href="{% url 'club_management:view_players'  team.team_id %}">View Players</a></td>
+</tr>
+
+{% endfor %}
+</table>
+
+{% endblock %}

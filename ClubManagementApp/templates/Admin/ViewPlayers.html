@@ -1,0 +1,29 @@
+{% extends 'Admin/AdminMaster.html' %}
+{% block page_content %}
+    
+<div class="container">
+    {% for player in players %}
+
+    <div class="row">
+    <div class="col-md-3 column">
+        <div class="card">
+           <img class="img-responsive" src="{{player.player_img.url}}" alt="{{player.player_name}}" style="width:100%;height:250px">
+           <div class="">
+              <h4 style="margin-top: 10px;">{{player.player_name|title}}</h4>
+              <p class="title h4">{{player.player_position|capfirst}}</p>
+              <p>
+              <div class="center">
+                  
+              
+                <a href="{% url 'club_management:view_player' player.player_id %}" value="View" class="btn btn-primary" style="margin-right: 4px;">View</a>
+                
+            
+            </div>
+              </p>
+           </div>
+        </div>
+     </div>
+    </div>
+     {% endfor %}
+
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends 'Admin/AdminMaster.html' %}
+
+{% block page_content %}
+
+<form action="{% url 'club_management:add_notification' %}" method="POST" class="f1">
+    {% csrf_token %}
+    <table class="tb">
+        <tr>
+            <td>{{form.notfn_title.label}}</td>
+            <td>{{form.notfn_title}}</td>
+        </tr>
+        <tr>
+            <td>{{form.notfn_content.label}}</td>
+            <td>{{form.notfn_content}}</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input type="submit" value="Submit" class="btn btn-primary"/></td>
+            
+        </tr>
+       
+    </table>
+   <p id="msg" class="alert alert-success msg">{{msg}}</p>
+</form>
+
+<script>
+     $(document).ready(function () {
+      var title=  document.getElementById("id_notfn_title")?document.getElementById("id_notfn_title").value="":null;
+     var content=    document.getElementById("id_notfn_content")?document.getElementById("id_notfn_content").value="":null;
+     var msg  = document.getElementById("msg")?document.getElementById("msg").value="":null;
+         $("input").focus(()=>{
+            
+            if(msg==null)
+            {
+                alert(msg)
+                document.getElementById('msg').setAttribute("style", "display:none");
+            document.getElementById('msg').innerHTML = "";
+        }
+        // if(msg!=null)
+        // {
+        //     document.getElementById('msg').setAttribute("style", "display:none");
+        // }
+    });     
+           
+            
+
+    }
+      
+     );
+</script>
+{% endblock %}

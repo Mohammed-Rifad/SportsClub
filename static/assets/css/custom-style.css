@@ -1,0 +1,11 @@
+.player-details{
+border-spacing: 20px;
+border-collapse: separate;
+margin-left: 380px;
+width: 600px!important;
+}
+.form-table{
+    border-spacing: 20px;
+    border-collapse: separate;
+    height: 200px;
+}

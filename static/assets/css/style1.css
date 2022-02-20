@@ -1,0 +1,18 @@
+.f1{
+    margin-left: 200px;
+    margin-top: 5px;
+  }
+  
+  .tb{
+    border-collapse: separate;
+    border-spacing: 30px;
+
+  }
+
+  .success-msg{
+color: green;
+  }
+
+  .msg{
+    width: 20px;
+  }

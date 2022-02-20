@@ -1,0 +1,41 @@
+{% extends 'Common/CommonMaster.html' %}
+{% block content %}
+<form action="{% url 'club_management:venue_reg' %}" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <p style="margin-left: 90px; font-weight: bolder;color:red; font-size: large;">Register Venue Now!</p>
+    <table  style="border-collapse: separate; border-spacing: 15px;">
+        <tr>
+           <td> {{form.venue_name.label}}</td>
+           <td> {{form.venue_name}}</td>
+        </tr>
+        <tr>
+            <td> {{form.venue_type.label}}</td>
+            <td> {{form.venue_type}}</td>
+         </tr>
+         <tr>
+            <td> {{form.venue_address.label}}</td>
+            <td> {{form.venue_address}}</td>
+         </tr>
+         <tr>
+            <td> {{form.venue_contact.label}}</td>
+            <td> {{form.venue_contact}}</td>
+         </tr>
+         <tr>
+            <td> {{form.venue_email.label}}</td>
+            <td> {{form.venue_email}}</td>
+         </tr>
+         <tr>
+            <td> {{form.venue_pic.label}}</td>
+            <td> {{form.venue_pic}}</td>
+         </tr>
+         <tr>
+            <td> {{form.venue_seat.label}}</td>
+            <td> {{form.venue_seat}}</td>
+         </tr>
+         
+         <tr><td></td><td><input type="submit" class="btn btn-primary" value="Register"/> {{msg}}</td></tr>
+    </table>
+    
+      
+</form>
+{% endblock %}

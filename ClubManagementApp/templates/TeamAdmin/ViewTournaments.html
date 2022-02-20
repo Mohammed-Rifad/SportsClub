@@ -1,0 +1,36 @@
+{% extends 'TeamAdmin/TeamAdminMaster.html' %}
+{% load humanize %}
+{% block content%}
+    <div class="container" style="min-height: 300px;">
+<table class="table table-hover">
+    <tr>
+        <th>Title</th>
+        <th>Starting Date</th>
+        <th>End Date</th>
+        <th>Reg Date</th>
+        <th>Max.Players</th>
+        <th>Ground Fee</th>
+        <th>Prize Money</th>
+    </tr>
+<tr>
+    {% for t in tournaments %}
+    <td style="max-width: 100px;overflow: hidden;">{{t.tournament_title|capfirst}}</td>
+    <td id="s_date">{{t.start_date}}</td>
+    <td >{{t.end_date}}</td>
+    <td>{{t.reg_date}}</td>
+    <td>{{t.players_allowed}}</td>
+    <td>Rs {{t.reg_fee|intcomma}}</td>
+    <td>Rs {{t.win_prize|intcomma}}</td>
+    <td><a href="{% url 'club_management:t_players' t.tournament_id %}" id="p">Register</a></td>
+  <td><a href="{% url 'club_management:t_players' t.tournament_id %}" id="p">Add Players</a></td>
+
+{% endfor %}
+</tr>
+</table>
+</div>
+
+
+
+{% endblock %}
+
+

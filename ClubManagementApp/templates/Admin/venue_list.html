@@ -1,0 +1,4 @@
+<option disabled=true selected=true>Select Venue</option>
+{% for venue in venue_list %}
+<option value="{{ venue.venue_id }}">{{ venue.venue_name|title}}</option>
+{% endfor %}

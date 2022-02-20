@@ -1,0 +1,23 @@
+{% extends 'Admin/AdminMaster.html' %}
+{% block page_content %}
+  
+<div>
+    <img src="{{block.venue_id.venue_seat.url}}">
+</div>
+<table class="table table-striped border-1">
+    <tr>
+       <td>Block Name</td>
+       <td>Total Seats</td>
+       <td>Amount</td>
+    </tr>
+
+<tr>
+    <td>{{block_data.block_title|title}}</td>
+    <td>{{block_data.amount}} </td>
+    <td>Rs {{block_data.total_seats}}</td>
+</tr>
+
+</table>
+
+
+{% endblock %}

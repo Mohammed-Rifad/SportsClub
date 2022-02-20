@@ -1,0 +1,93 @@
+{% extends 'TeamAdmin/TeamAdminMaster.html' %}
+
+{% block content%}
+ <img src="{{player.player_img.url}}">
+<form action="{% url 'club_management:add_player' %}" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+{{msg}}
+    <table style="margin-left: 240px; border-spacing: 10px;border-collapse: separate;"> 
+    <tr>
+        <td>
+            {{form.player_name.label}}
+        </td>
+        <td>
+            {{form.player_name}}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            {{form.player_address.label}}
+        </td>
+        <td>
+            {{form.player_address}}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            {{form.player_dob.label}}
+        </td>
+        <td>
+            {{form.player_dob}}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Player Position
+        </td>
+        <td>
+           <select name="position" class="form-control">
+               {% for position in positions %}
+               <option value="{{position|lower}}">{{position|title}}</option>
+               {% endfor %}
+           </select>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            {{form.player_email.label}}
+        </td>
+        <td>
+            {{form.player_email}}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            {{form.player_ph.label}}
+        </td>
+        <td>
+            {{form.player_ph}}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            {{form.player_height.label}}
+        </td>
+        <td>
+            {{form.player_height}}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            {{form.player_weight.label}}
+        </td>
+        <td>
+            {{form.player_weight}}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            {{form.player_img.label}}
+        </td>
+        <td>
+            {{form.player_img}}
+        </td>
+    </tr>
+    <tr>
+        <td></td>
+        <td><input type="submit" value="ADD" class="btn btn-primary"></td>
+    </tr>
+</table>
+</form>
+{% endblock %}
+
+
