@@ -30,6 +30,11 @@ urlpatterns=[
     path('TeamHome',TeamView.TeamHome,name="team_home"),
     path('TeamHome/ViewPlayers',TeamView.ViewPlayers,name="view_players"),
     path('TeamHome/Tournaments',TeamView.ViewTournaments,name="ta_view_tournaments"),
+    path('TeamHome/TRegistered',TeamView.RegisteredTournaments,name="ta_treg"),
+    path('Admin/TrTeams',AdminView.TournamentTeams,name="a_trTeam"),
+    path('Admin/ViewTrTeam',AdminView.ViewTournamentPlayers,name="a_viewtrTeam"),
+    path('Admin/UpdatePlayer',AdminView.UpdatePlayerStatus,name="a_updpl"),
+
     path('TeamHome/T-Players/<int:id>',TeamView.AddTournamentPlayers,name="t_players"),
     path('TeamHome/Edit/<int:id>',TeamView.EditPlayer,name="edit_player"),
     path('TeamHome/Del/<int:id>',TeamView.DeletePlayer,name="delete_player"),

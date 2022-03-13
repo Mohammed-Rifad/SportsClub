@@ -1,0 +1,31 @@
+{% extends 'Admin/AdminMaster.html' %}
+
+{% block page_content %}
+
+<table class="table table-striped">
+<tr>
+    <th></th>
+    <th>Player Name</th>
+    <th>D.O.B</th>
+    <th>Status</th>
+    <th>file</th>
+    <th>Approve/Reject</th>
+</tr>
+{% for player in players_list %}
+<form action="{% url 'club_management:a_updpl' %}" method="POST">
+    {% csrf_token %}
+<tr align="center">
+    <td><img src="{{player.player_id.player_img.url}}" class="img img-rounded"> </td>
+    <td>{{player.player_id.player_name|title}}</td>
+    <td>{{player.player_id.player_dob}}</td>
+    <td>{{player.player_status}}</td>
+    <td><a href="{{player.cert.url}}" target="_blank">view</a></td>
+    <td><button style="background-color: none; border: none;text-decoration: underline;color: blue;" name="approve">Approve</a></td>
+        <td><button style="background-color: none; border: none;text-decoration: underline;color: blue;" name="reject">Reject</a></td>
+            <td><input type="hidden" name="pl" value="{{player.player_id.player_id}}" id=""></td>
+        </tr>
+</form>
+{% endfor %}
+</table>
+
+{% endblock %}

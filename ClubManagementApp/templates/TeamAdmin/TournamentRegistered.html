@@ -16,15 +16,15 @@
     </tr>
 <tr>
     {% for t in tournaments %}
-    <td style="max-width: 100px;overflow: hidden;">{{t.tournament_title|capfirst}}</td>
-    <td id="s_date">{{t.start_date}}</td>
-    <td >{{t.end_date}}</td>
-    <td>{{t.reg_date}}</td>
-    <td>{{t.players_allowed}}</td>
-    <td>Rs {{t.reg_fee|intcomma}}</td>
-    <td>Rs {{t.win_prize|intcomma}}</td>
-    <td><a href="{% url 'club_management:t_players' t.tournament_id %}" name="reg" id="p">Register</a></td>
-  <!-- <td><a href="{% url 'club_management:t_players' t.tournament_id %}" id="p">Add Players</a></td> -->
+    <td style="max-width: 100px;overflow: hidden;">{{t.tournament_id.tournament_title|capfirst}}</td>
+    <td id="s_date">{{t.tournament_id.start_date}}</td>
+    <td >{{t.tournament_id.end_date}}</td>
+    <td>{{t.tournament_id.reg_date}}</td>
+    <td>{{t.tournament_id.players_allowed}} No{{t.tournament_id.players_allowed|pluralize}} </td>
+    <td>Rs {{t.tournament_id.reg_fee|intcomma}}</td>
+    <td>Rs {{t.tournament_id.win_prize|intcomma}}</td>
+   
+  <td><a href="{% url 'club_management:t_players' t.tournament_id.tournament_id %}" id="p">Add Players</a></td>
     <td><input type="hidden" name="t_id" value="{{t.tournament_id}}" id=""></td>
 </tr>
 

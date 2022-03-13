@@ -1,0 +1,40 @@
+{% extends 'Admin/AdminMaster.html' %}
+{% load humanize %}
+{% block page_content%}
+
+    <div class="container" style="min-height: 300px;">
+<table class="table table-hover">
+    <tr>
+        <th></th>
+        <th>Team Name</th>
+        <th>Place</th>
+        <th>Email</th>
+        <th>Phone No</th>
+    
+            
+        <th></th>
+        <th></th>
+    </tr>
+<tr>
+    {% for t in teams %}
+  
+    <td><img src="{{t.team_id.team_logo.url}}" height="100px" width="100px" alt=""></td>
+    
+    <td >{{t.team_id.team_name|title}}</td>
+    <td >{{t.team_id.team_place|title}}</td>
+    <td >{{t.team_id.team_email}}</td>
+    <td >{{t.team_id.team_phno}}</td>
+    <td><a href="/SCMS/Admin/ViewTrTeam?t_id={{t.team_id.team_id}}&tr_id={{t.tournament_id.tournament_id}}">Players</a></td>
+    
+    
+</tr>
+
+{% endfor %}
+</table>
+</div>
+
+
+
+{% endblock %}
+
+

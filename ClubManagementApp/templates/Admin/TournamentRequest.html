@@ -27,16 +27,19 @@
 
 <form action="" method="POST" class="f1">
 
-    <table style="border-spacing: 10px;border-collapse: separate;">
+    <table style="border-spacing: 10px;border-collapse: separate; margin-top: 20px;" class="table table-hover">
         <tr class="h4">
             <td>Tournament</td>
-            <td>Team Name</td>
-
+            <td>Venue</td>
+            <td></td>
              
         </tr>
-        {% for t in team_reg %}
+        {% for t in t_data %}
         <tr>
-            
+            <td>{{t.tournament_title|title}}</td>
+            <td>{{t.venue_id.venue_name|title}}</td>
+            <td><a href="/SCMS/Admin/TrTeams?id={{t.tournament_id}}">Registered Teams</a></td>
+            <!-- <td><input type="hidden" name="t_id" value="{{t.tournament_id}}" id=""></td> -->
         </tr>
         {% endfor %}
     </table>

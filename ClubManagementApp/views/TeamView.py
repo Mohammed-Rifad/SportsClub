@@ -87,6 +87,7 @@ def ViewPlayer(request,id):
 def ViewTournaments(request):
     tournament_data=TournamentDetails.objects.filter(tournament_status='not completed')
     # is_registered=TournamentRegistration.objects.filter(tournament_id=)
+
     return render(request,'TeamAdmin/ViewTournaments.html',{'tournaments':tournament_data,})
 
 
@@ -97,33 +98,81 @@ def AddTournamentPlayers(request,id):
     current_players=PlayerDetails.objects.filter(team_id=request.session['team_id'])
     added_players=TournamentPlayers.objects.filter(team_id=request.session['team_id'])
     msg=""
+
+    current_count=TournamentPlayers.objects.filter(tournament_id=tournament.tournament_id,team_id=request.session['team_id']).count()
+    approved=False
+    for p in added_players:
+        
+        if p.player_status=='not approved' or p.player_status=='rejected':
+            
+            approved=True
+            break;
+
+    print(approved)
     if request.method=='POST':
-        player=request.POST['p']
-        file=request.FILES['p_file']
 
-        exist=TournamentPlayers.objects.filter(tournament_id=id,player_id=player).exists()
-        if not exist:
+        if 'checkout' in request.POST:
+            pass
 
-            tournament_id=TournamentDetails.objects.get(tournament_id=id)
-            player_id=PlayerDetails.objects.get(player_id=player)
-            team_id=TeamDetails.objects.get(team_id=request.session['team_id'])
+        if 'del' in request.POST:
+            t_id=request.POST['tid']
+            p_id=request.POST['pid']
 
-            data=TournamentPlayers(player_id=player_id,tournament_id=tournament_id,team_id=team_id,cert=file)
-            data.save()   
-            msg="Player Added Succesfully"
-       
+            TournamentPlayers.objects.filter(player_id=p_id,tournament_id=t_id).delete()
+        
+
+            
         else:
-            msg="Player Already Added"
+            player=request.POST['p']
+            file=request.FILES['p_file']
+            print('current count',current_count)
+            print('allowed',tournament.players_allowed)
+            exist=TournamentPlayers.objects.filter(tournament_id=id,player_id=player).exists()
+            if not exist:
+                print('current count',current_count+1)
+                print('allowed',tournament.players_allowed)
+                if current_count+1<=tournament.players_allowed:
+                    tournament_id=TournamentDetails.objects.get(tournament_id=id)
+                    player_id=PlayerDetails.objects.get(player_id=player)
+                    team_id=TeamDetails.objects.get(team_id=request.session['team_id'])
+
+                    data=TournamentPlayers(player_id=player_id,tournament_id=tournament_id,team_id=team_id,cert=file)
+                    data.save()   
+                    msg="Player Added Succesfully"
+                else:
+                    msg="Maximum Players Exceeded"
+        
+            else:
+                msg="Player Already Added"
+
+    if request.method=='GET':
+         
+        exist=TournamentRegistration.objects.filter(tournament_id=id,team_id=request.session['team_id']).exists()
+        if not exist:
+             
+            tour=TournamentDetails.objects.get(tournament_id=id)
+            team=TeamDetails.objects.get(team_id=request.session['team_id'])
+            reg=TournamentRegistration(tournament_id=tour,team_id=team)
+            reg.save()
+    
+    team_registered=TournamentRegistration.objects.filter(team_id=request.session['team_id'],tournament_id=id).exists()
 
     context={
         'tournament':tournament,
         'cur_players':current_players,
         'added_players':added_players,
-        'msg':msg
+        'msg':msg,
+        'team_resgistered':team_registered,
+        'approved':approved
             }
     return render(request,'TeamAdmin/TournamentPlayers.html',context)
 
 
+
+def RegisteredTournaments(request):
+    
+    tournaments=TournamentRegistration.objects.filter(team_id=request.session['team_id'])
+    return render(request,'TeamAdmin/TournamentRegistered.html',{'tournaments':tournaments,})
 
 
 def Logout(request):

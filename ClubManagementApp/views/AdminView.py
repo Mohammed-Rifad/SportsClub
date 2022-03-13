@@ -158,7 +158,7 @@ def AddTournament(request):
             msg="Invalid Date Selection"
             return render(request,'Admin/TournamentAdd.html',{'sport_type':sport_type,'msg':msg})  
         
-        elif reg_con>st_con or reg_con>en_con:
+        elif reg_con<st_con or reg_con>en_con:
             print('third') 
             msg="Invalid Date Selection"
             return render(request,'Admin/TournamentAdd.html',{'sport_type':sport_type,'msg':msg})   
@@ -180,6 +180,33 @@ def getVenue(request):
 
 
 def TournamentRequest(request):
+    
     t_data=TournamentDetails.objects.filter(tournament_status="not completed")
-    team_reg=1
     return render(request, 'Admin/TournamentRequest.html',{'t_data':t_data})
+
+def TournamentTeams(request):
+    teams=TournamentRegistration.objects.filter(tournament_id=request.GET['id'])
+    print(teams)
+    return render(request, 'Admin/RegTeam.html',{'teams':teams,})
+
+def ViewTournamentPlayers(request):
+    if 't_id' in request.GET:
+        team=request.GET['t_id']
+        tournament=request.GET['tr_id']
+        request.session['t']=team
+        request.session['tr']=tournament
+    players_list=TournamentPlayers.objects.filter(team_id=request.session['t'],tournament_id=request.session['tr'])
+    return render(request, 'Admin/TrTeamPlayers.html',{'players_list':players_list,})
+
+def UpdatePlayerStatus(request):
+    player=request.POST['pl']
+    if 'approve' in request.POST:
+        record=TournamentPlayers.objects.get(player_id=player,tournament_id=request.session['tr'])
+        record.player_status='approved'
+        record.save()
+        return redirect('club_management:a_viewtrTeam')
+    if 'reject' in request.POST:
+        record=TournamentPlayers.objects.get(player_id=player,tournament_id=request.session['tr'])
+        record.player_status='rejected'
+        record.save()
+        return redirect('club_management:a_viewtrTeam')
