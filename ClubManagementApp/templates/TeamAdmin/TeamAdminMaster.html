@@ -1,320 +1,399 @@
 
 {% load static %}
-<!DOCTYPE html>
 <html lang="en">
-   <!-- Basic -->
-   <meta charset="utf-8">
-   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-   <!-- Mobile Metas -->
-   <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-   <!-- Site Metas -->
-   <title>Game Info</title>
-   <meta name="keywords" content="">
-   <meta name="description" content="">
-   <meta name="author" content="">
-   <!-- Site Icons -->
-   <link rel="shortcut icon" href="" type="image/x-icon" />
-   <link rel="apple-touch-icon" href="">
-   <!-- Bootstrap CSS -->
-   <link rel="stylesheet" href="{% static 'Common/css/bootstrap.min.css' %}">
-   <!-- Site CSS -->
-   <link rel="stylesheet" href="{% static 'Common/style.css' %}">
-   <!-- Colors CSS -->
-   <link rel="stylesheet" href="{% static 'Common/css/colors.css' %}">
-   <link rel="stylesheet" href="{% static 'assets/css/custom-style.css' %}">
-   <!-- ALL VERSION CSS -->	
-   <link rel="stylesheet" href="{% static 'Common/css/versions.css' %}">
-   <!-- Responsive CSS -->
-   <link rel="stylesheet" href="{% static 'Common/css/responsive.css' %}">
-   <!-- Custom CSS -->
-   <link rel="stylesheet" href="{% static 'Common/css/custom.css' %}">
-   <!-- font family -->
-   <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-   <!-- end font family -->
-   <link rel="stylesheet" href="{% static 'Common/css/3dslider.css' %}" />
-   <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
-   <link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
-   <script src="{% static 'Common/js/3dslider.js' %}"></script>
-   </head>
-   <body class="game_info" data-spy="scroll" data-target=".header">
-      <!-- LOADER -->
-      <div id="preloader">
-         <img class="preloader" src="{% static 'Common/images/loading-img.gif' %}" alt="">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Skydash Admin</title>
+  <!-- plugins:css -->
+ 
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.6.0/dist/umd/popper.min.js" integrity="sha384-KsvD1yqQ1/1+IA7gi3P0tyJcT3vR+NdBTt13hSJ2lnve8agRGXTTyNaBYmCR/Nwi" crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="{% static 'vendors/feather/feather.css' %}">
+  <link rel="stylesheet" href="{% static 'vendors/ti-icons/css/themify-icons.css' %}">
+  <link rel="stylesheet" href="{% static 'vendors/css/vendor.bundle.base.css' %}">
+  <!-- endinject -->
+  <!-- Plugin css for this page -->
+  <link rel="stylesheet" href="{% static 'vendors/datatables.net-bs4/dataTables.bootstrap4.css' %}">
+  <link rel="stylesheet" href="{% static 'vendors/ti-icons/css/themify-icons.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'js/select.dataTables.min.css' %}">
+  <!-- End plugin css for this page -->
+  <!-- inject:css -->
+  <link rel="stylesheet" href="{% static 'css/vertical-layout-light/style.css' %}">
+  <!-- endinject -->
+  <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" />
+  <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <div class="container-scroller">
+    <!-- partial:partials/_navbar.html -->
+    <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+      <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+        <a class="navbar-brand brand-logo mr-5" href="index.html"><img src="{% static 'images/logo.svg' %}" class="mr-2"
+            alt="logo" /></a>
+        <a class="navbar-brand brand-logo-mini" href="index.html"><img src="{% static 'images/logo-mini.svg' %}" alt="logo" /></a>
       </div>
-      <!-- END LOADER -->
-      <section id="top">
-         <header>
-            <div class="container">
-               <div class="header-top">
-                  <div class="row">
-                     <div class="col-md-6">
-                        <div class="full">
-                           <div class="logo">
-                              <a href="index.html"><img src="{% static 'Common/images/logo.png' %}" alt="#" /></a>
-                           </div>
-                        </div>
-                     </div>
-                     <div class="col-md-6">
-                        <div class="right_top_section">
-                           <!-- social icon -->
-                           <ul class="social-icons pull-left">
-                              <li><a class="facebook" href="#"><i class="fa fa-facebook"></i></a></li>
-                              <li><a class="twitter" href="#"><i class="fa fa-twitter"></i></a></li>
-                              <li><a class="youtube" href="#"><i class="fa fa-youtube-play"></i></a></li>
-                              <li><a class="pinterest" href="#"><i class="fa fa-pinterest-p"></i></a></li>
-                           </ul>
-                           <!-- end social icon -->
-                           <!-- button section -->
-                           <ul class="login">
-                              <!-- <li class="login-modal">
-                                 <a href="#" class="login"><i class="fa fa-user"></i>Login</a>
-                              </li> -->
-                              <li>
-                                 <div class="cart-option">
-                                    <a href="{% url 'club_management:logout' %}"><i class="fa fa-sign-out"></i>logout</a>
-                                 </div>
-                              </li>
-                           </ul>
-                           <!-- end button section -->
-                        </div>
-                     </div>
-                  </div>
-               </div>
-               <div class="header-bottom">
-                  <div class="row">
-                     <div class="col-md-12">
-                        <div class="full">
-                           <div class="main-menu-section">
-                              <div class="menu">
-                                 <nav class="navbar navbar-inverse">
-                                    <div class="navbar-header">
-                                       <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".js-navbar-collapse">
-                                       <span class="sr-only">Toggle navigation</span>
-                                       <span class="icon-bar"></span>
-                                       <span class="icon-bar"></span>
-                                       <span class="icon-bar"></span>
-                                       </button>
-                                       <a class="navbar-brand" href="#">Menu</a>
-                                    </div>
-                                    <div class="collapse navbar-collapse js-navbar-collapse">
-                                       <ul class="nav navbar-nav">
-                                          <li class="active"><a href="index.html">Home</a></li>
-                                          <li><a href="{% url 'club_management:add_player' %}">Add Player</a></li>
-                                          <li><a href="{% url 'club_management:view_players' %}">Players</a></li>
-                                          <li><a href="{% url 'club_management:ta_view_tournaments' %}">Tournaments</a></li>
-                                          <li><a href="{% url 'club_management:ta_treg' %}">Registered Tournaments</a></li>
-                                          
-                                         
-                                          <li><a href="blog.html">Blog</a></li>
-                                          <li><a href="contact.html">contact</a></li>
-                                       </ul>
-                                    </div>
-                                    <!-- /.nav-collapse -->
-                                 </nav>
-                                 <!-- <div class="search-bar">
-                                    <div id="imaginary_container">
-                                       <div class="input-group stylish-input-group">
-                                          <input type="text" class="form-control"  placeholder="Search" >
-                                          <span class="input-group-addon">
-                                          <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>  
-                                          </span>
-                                       </div>
-                                    </div>
-                                 </div> -->
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
+      <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+        <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+          <span class="icon-menu"></span>
+        </button>
+        <ul class="navbar-nav mr-lg-2">
+          <li class="nav-item nav-search d-none d-lg-block">
+            <div class="input-group">
+              <div class="input-group-prepend hover-cursor" id="navbar-search-icon">
+                <span class="input-group-text" id="search">
+                  <i class="icon-search"></i>
+                </span>
+              </div>
+              <input type="text" class="form-control" id="navbar-search-input" placeholder="Search now"
+                aria-label="search" aria-describedby="search">
             </div>
-         </header>
-         <div class="inner-page-banner">
-            <div class="container">
+          </li>
+        </ul>
+        <ul class="navbar-nav navbar-nav-right">
+          <li class="nav-item dropdown">
+            <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#"
+              data-toggle="dropdown">
+              <i class="icon-bell mx-0"></i>
+              <span class="count"></span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list"
+              aria-labelledby="notificationDropdown">
+              <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
+              <a class="dropdown-item preview-item">
+                <div class="preview-thumbnail">
+                  <div class="preview-icon bg-success">
+                    <i class="ti-info-alt mx-0"></i>
+                  </div>
+                </div>
+                <div class="preview-item-content">
+                  <h6 class="preview-subject font-weight-normal">Application Error</h6>
+                  <p class="font-weight-light small-text mb-0 text-muted">
+                    Just now
+                  </p>
+                </div>
+              </a>
+              <a class="dropdown-item preview-item">
+                <div class="preview-thumbnail">
+                  <div class="preview-icon bg-warning">
+                    <i class="ti-settings mx-0"></i>
+                  </div>
+                </div>
+                <div class="preview-item-content">
+                  <h6 class="preview-subject font-weight-normal">Settings</h6>
+                  <p class="font-weight-light small-text mb-0 text-muted">
+                    Private message
+                  </p>
+                </div>
+              </a>
+              <a class="dropdown-item preview-item">
+                <div class="preview-thumbnail">
+                  <div class="preview-icon bg-info">
+                    <i class="ti-user mx-0"></i>
+                  </div>
+                </div>
+                <div class="preview-item-content">
+                  <h6 class="preview-subject font-weight-normal">New user registration</h6>
+                  <p class="font-weight-light small-text mb-0 text-muted">
+                    2 days ago
+                  </p>
+                </div>
+              </a>
             </div>
-         </div>
-         <div class="inner-information-text">
-            <div class="container">
-               <h3></h3>
-               <!-- <ul class="breadcrumb">
-                  <li><a href="index.html">Home</a></li>
-                  <li class="active">Our Team</li>
-               </ul> -->
+          </li>
+          <li class="nav-item nav-profile dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
+              <img src="{% static 'images/faces/face28.jpg' %}" alt="profile" />
+            </a>
+            <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
+              <a class="dropdown-item">
+                <i class="ti-settings text-primary"></i>
+                Settings
+              </a>
+              <a class="dropdown-item">
+                <i class="ti-power-off text-primary"></i>
+                Logout
+              </a>
             </div>
-         </div>
-      </section>
-      <section id="contant" class="contant main-heading team">
-         <div class="col-md-12">
-            {% block content%}
-                    
-             {% endblock %}
-         </div>
-         <!-- <div class="row">
-            <div class="container">
-               <div class="col-md-3 column">
-                  <div class="card">
-                     <img class="img-responsive" src="images/img-1-4.jpg" alt="John" style="width:100%">
-                     <div class="">
-                        <h4>John Doe</h4>
-                        <p class="title">Designer</p>
-                        <p>
-                        <div class="center"><button class="button">Contact</button></div>
-                        </p>
-                     </div>
+          </li>
+          <li class="nav-item nav-settings d-none d-lg-flex">
+            <a class="nav-link" href="#">
+              <i class="icon-ellipsis"></i>
+            </a>
+          </li>
+        </ul>
+        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
+          data-toggle="offcanvas">
+          <span class="icon-menu"></span>
+        </button>
+      </div>
+    </nav>
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+      <!-- partial:partials/_settings-panel.html -->
+      <div class="theme-setting-wrapper">
+        <div id="settings-trigger"><i class="ti-settings"></i></div>
+        <div id="theme-settings" class="settings-panel">
+          <i class="settings-close ti-close"></i>
+          <p class="settings-heading">SIDEBAR SKINS</p>
+          <div class="sidebar-bg-options selected" id="sidebar-light-theme">
+            <div class="img-ss rounded-circle bg-light border mr-3"></div>Light
+          </div>
+          <div class="sidebar-bg-options" id="sidebar-dark-theme">
+            <div class="img-ss rounded-circle bg-dark border mr-3"></div>Dark
+          </div>
+          <p class="settings-heading mt-2">HEADER SKINS</p>
+          <div class="color-tiles mx-0 px-4">
+            <div class="tiles success"></div>
+            <div class="tiles warning"></div>
+            <div class="tiles danger"></div>
+            <div class="tiles info"></div>
+            <div class="tiles dark"></div>
+            <div class="tiles default"></div>
+          </div>
+        </div>
+      </div>
+      <div id="right-sidebar" class="settings-panel">
+     
+        <div class="tab-content" id="setting-content">
+          <div class="tab-pane fade show active scroll-wrapper" id="todo-section" role="tabpanel"
+            aria-labelledby="todo-section">
+            
+            <div class="list-wrapper px-3">
+              <ul class="d-flex flex-column-reverse todo-list">
+                <li>
+                  <div class="form-check">
+                    <label class="form-check-label">
+                      <input class="checkbox" type="checkbox">
+                      Team review meeting at 3.00 PM
+                    </label>
                   </div>
-               </div>
-               <div class="col-md-3 column">
-                  <div class="card">
-                     <img class="img-responsive" src="images/img-1-2.jpg" alt="Mike" style="width:100%">
-                     <div class="">
-                        <h4>Mike Ross</h4>
-                        <p class="title">Art Director</p>
-                        <p>
-                        <div class="center"><button class="button">Contact</button></div>
-                        </p>
-                     </div>
+                  <i class="remove ti-close"></i>
+                </li>
+                <li>
+                  <div class="form-check">
+                    <label class="form-check-label">
+                      <input class="checkbox" type="checkbox">
+                      Prepare for presentation
+                    </label>
                   </div>
-               </div>
-               <div class="col-md-3 column">
-                  <div class="card">
-                     <img class="img-responsive" src="images/img-1-3.jpg" alt="John" style="width:100%">
-                     <div class="">
-                        <h4>John Doe</h4>
-                        <p class="title">Designer</p>
-                        <p>
-                        <div class="center"><button class="button">Contact</button></div>
-                        </p>
-                     </div>
+                  <i class="remove ti-close"></i>
+                </li>
+                <li>
+                  <div class="form-check">
+                    <label class="form-check-label">
+                      <input class="checkbox" type="checkbox">
+                      Resolve all the low priority tickets due today
+                    </label>
                   </div>
-               </div>
-               <div class="col-md-3 column">
-                  <div class="card">
-                     <img class="img-responsive" src="images/img-1-4.jpg" alt="John" style="width:100%">
-                     <div class="">
-                        <h4>John Doe</h4>
-                        <p class="title">Designer</p>
-                        <p>
-                        <div class="center"><button class="button">Contact</button></div>
-                        </p>
-                     </div>
+                  <i class="remove ti-close"></i>
+                </li>
+                <li class="completed">
+                  <div class="form-check">
+                    <label class="form-check-label">
+                      <input class="checkbox" type="checkbox" checked>
+                      Schedule meeting for next week
+                    </label>
                   </div>
-               </div>
-               <div class="col-md-3 column">
-                  <div class="card">
-                     <img class="img-responsive" src="images/img-1-2.jpg" alt="Mike" style="width:100%">
-                     <div class="">
-                        <h4>Mike Ross</h4>
-                        <p class="title">Art Director</p>
-                        <p>
-                        <div class="center"><button class="button">Contact</button></div>
-                        </p>
-                     </div>
+                  <i class="remove ti-close"></i>
+                </li>
+                <li class="completed">
+                  <div class="form-check">
+                    <label class="form-check-label">
+                      <input class="checkbox" type="checkbox" checked>
+                       Project review
+                    </label>
                   </div>
-               </div>
-               <div class="col-md-3 column">
-                  <div class="card">
-                     <img class="img-responsive" src="images/img-1-3.jpg" alt="John" style="width:100%">
-                     <div class="">
-                        <h4>John Doe</h4>
-                        <p class="title">Designer</p>
-                        <p>
-                        <div class="center"><button class="button">Contact</button></div>
-                        </p>
-                     </div>
-                  </div>
-               </div>
-               <div class="col-md-3 column">
-                  <div class="card">
-                     <img class="img-responsive" src="images/img-1-3.jpg" alt="John" style="width:100%">
-                     <div class="">
-                        <h4>John Doe</h4>
-                        <p class="title">Designer</p>
-                        <p>
-                        <div class="center"><button class="button">Contact</button></div>
-                        </p>
-                     </div>
-                  </div>
-               </div>
-               <div class="col-md-3 column">
-                  <div class="card">
-                     <img class="img-responsive" src="images/img-1-4.jpg" alt="John" style="width:100%">
-                     <div class="">
-                        <h4>John Doe</h4>
-                        <p class="title">Designer</p>
-                        <p>
-                        <div class="center"><button class="button">Contact</button></div>
-                        </p>
-                     </div>
-                  </div>
-               </div>
+                  <i class="remove ti-close"></i>
+                </li>
+              </ul>
             </div>
-         </div> -->
-      </section>
-      <!-- <footer id="footer" class="footer">
-         <div class="container">
-            <div class="row">
-               <div class="col-md-4">
-                  <div class="full">
-                     <div class="footer-widget">
-                        <div class="footer-logo">
-                           <a href="#"><img src="images/footer-logo.png" alt="#" /></a>
-                        </div>
-                        <p>Most of our events have hard and easy route choices as we are always keen to encourage new riders.</p>
-                        <ul class="social-icons style-4 pull-left">
-                           <li><a class="facebook" href="#"><i class="fa fa-facebook"></i></a></li>
-                           <li><a class="twitter" href="#"><i class="fa fa-twitter"></i></a></li>
-                           <li><a class="youtube" href="#"><i class="fa fa-youtube-play"></i></a></li>
-                           <li><a class="pinterest" href="#"><i class="fa fa-pinterest-p"></i></a></li>
-                        </ul>
-                     </div>
-                  </div>
-               </div>
-               <div class="col-md-2">
-                  <div class="full">
-                     <div class="footer-widget">
-                        <h3>Menu</h3>
-                        <ul class="footer-menu">
-                           <li><a href="about.html">About Us</a></li>
-                           <li><a href="team.html">Our Team</a></li>
-                           <li><a href="news.html">Latest News</a></li>
-                           <li><a href="matche.html">Recent Matchs</a></li>
-                           <li><a href="blog.html">Our Blog</a></li>
-                           <li><a href="contact.html">Contact Us</a></li>
-                        </ul>
-                     </div>
-                  </div>
-               </div>
-               <div class="col-md-3">
-                  <div class="full">
-                     <div class="footer-widget">
-                        <h3>Contact us</h3>
-                        <ul class="address-list">
-                           <li><i class="fa fa-map-marker"></i> Lorem Ipsum is simply dummy text of the printing..</li>
-                           <li><i class="fa fa-phone"></i> 123 456 7890</li>
-                           <li><i style="font-size:20px;top:5px;" class="fa fa-envelope"></i> demo@gmail.com</li>
-                        </ul>
-                     </div>
-                  </div>
-               </div>
-               <div class="col-md-3">
-                  <div class="full">
-                     <div class="contact-footer">
-                        <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d120615.72236587871!2d73.07890527988283!3d19.140910987164396!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin!4v1527759905404" width="600" height="350" frameborder="0" style="border:0" allowfullscreen></iframe>
-                     </div>
-                  </div>
-               </div>
+            <h4 class="px-3 text-muted mt-5 font-weight-light mb-0">Events</h4>
+            <div class="events pt-4 px-3">
+              <div class="wrapper d-flex mb-2">
+                <i class="ti-control-record text-primary mr-2"></i>
+                <span>Feb 11 2018</span>
+              </div>
+              <p class="mb-0 font-weight-thin text-gray">Creating component page build a js</p>
+              <p class="text-gray mb-0">The total number of sessions</p>
             </div>
-         </div>
-         <div class="footer-bottom">
-            <div class="container">
-               <p>Copyright © 2018 GameInfo.All rights reserved.</p>
+            <div class="events pt-4 px-3">
+              <div class="wrapper d-flex mb-2">
+                <i class="ti-control-record text-primary mr-2"></i>
+                <span>Feb 7 2018</span>
+              </div>
+              <p class="mb-0 font-weight-thin text-gray">Meeting with Alisa</p>
+              <p class="text-gray mb-0 ">Call Sarah Graves</p>
             </div>
-         </div>
-      </footer> -->
-      <a href="#home" data-scroll class="dmtop global-radius"><i class="fa fa-angle-up"></i></a>
-      <!-- ALL JS FILES -->
-      <script src="{% static 'Common/js/all.js' %}"></script>
-      <!-- ALL PLUGINS -->
-      <script src="{% static 'Common/js/custom.js' %}"></script>
-   </body>
+          </div>
+          <!-- To do section tab ends -->
+          <div class="tab-pane fade" id="chats-section" role="tabpanel" aria-labelledby="chats-section">
+            <div class="d-flex align-items-center justify-content-between border-bottom">
+              <p class="settings-heading border-top-0 mb-3 pl-3 pt-0 border-bottom-0 pb-0">Friends</p>
+              <small class="settings-heading border-top-0 mb-3 pt-0 border-bottom-0 pb-0 pr-3 font-weight-normal">See
+                All</small>
+            </div>
+            <ul class="chat-list">
+              <li class="list active">
+                <div class="profile"><img src="{% static 'images/faces/face1.jpg' %}" alt="image"><span class="online"></span></div>
+                <div class="info">
+                  <p>Thomas Douglas</p>
+                  <p>Available</p>
+                </div>
+                <small class="text-muted my-auto">19 min</small>
+              </li>
+              <li class="list">
+                <div class="profile"><img src="{% static 'images/faces/face2.jpg' %}" alt="image"><span class="offline"></span></div>
+                <div class="info">
+                  <div class="wrapper d-flex">
+                    <p>Catherine</p>
+                  </div>
+                  <p>Away</p>
+                </div>
+                <div class="badge badge-success badge-pill my-auto mx-2">4</div>
+                <small class="text-muted my-auto">23 min</small>
+              </li>
+              <li class="list">
+                <div class="profile"><img src="{% static 'images/faces/face3.jpg' %}" alt="image"><span class="online"></span></div>
+                <div class="info">
+                  <p>Daniel Russell</p>
+                  <p>Available</p>
+                </div>
+                <small class="text-muted my-auto">14 min</small>
+              </li>
+              <li class="list">
+                <div class="profile"><img src="{% static 'images/faces/face4.jpg' %}" alt="image"><span class="offline"></span></div>
+                <div class="info">
+                  <p>James Richardson</p>
+                  <p>Away</p>
+                </div>
+                <small class="text-muted my-auto">2 min</small>
+              </li>
+              <li class="list">
+                <div class="profile"><img src="{% static 'images/faces/face5.jpg' %}" alt="image"><span class="online"></span></div>
+                <div class="info">
+                  <p>Madeline Kennedy</p>
+                  <p>Available</p>
+                </div>
+                <small class="text-muted my-auto">5 min</small>
+              </li>
+              <li class="list">
+                <div class="profile"><img src="{% static 'images/faces/face6.jpg' %}" alt="image"><span class="online"></span></div>
+                <div class="info">
+                  <p>Sarah Graves</p>
+                  <p>Available</p>
+                </div>
+                <small class="text-muted my-auto">47 min</small>
+              </li>
+            </ul>
+          </div>
+          <!-- chat tab ends -->
+        </div>
+      </div>
+    
+      <nav class="sidebar sidebar-offcanvas" id="sidebar">
+        <ul class="nav">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'club_management:team_home' %}">
+              <i class="icon-grid menu-icon"></i>
+              <span class="menu-title">Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link"  href="{% url 'club_management:add_player' %}" aria-expanded="false" aria-controls="ui-basic">
+              <i class="icon-layout menu-icon"></i>
+              <span class="menu-title">Add Player</span>
+              <!-- <i class="menu-arrow"></i> -->
+            </a>
+           
+          </li>
+          <li class="nav-item">
+            <a class="nav-link"  href="{% url 'club_management:ta_view_tournaments' %}" aria-expanded="false"
+              aria-controls="form-elements">
+              <i class="icon-columns menu-icon"></i>
+              <span class="menu-title">View Tournaments</span>
+
+            </a>
+             
+          </li>
+          <li class="nav-item">
+            <a class="nav-link"  href="{% url 'club_management:add_notification' %}" aria-expanded="false" aria-controls="charts">
+              <i class="icon-bar-graph menu-icon"></i>
+              <span class="menu-title">Add Notifications</span>
+              <!-- <i class="menu-arrow"></i> -->
+            </a>
+            
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#tables" aria-expanded="false" aria-controls="tables">
+              <i class="icon-grid-2 menu-icon"></i>
+              <span class="menu-title">Tournament Request</span>
+              <!-- <i class="menu-arrow"></i> -->
+            </a>
+            
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#icons" aria-expanded="false" aria-controls="icons">
+              <i class="icon-contract menu-icon"></i>
+              <span class="menu-title">All Users</span>
+              <!-- <i class="menu-arrow"></i> -->
+            </a>
+             
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
+              <i class="icon-head menu-icon"></i>
+              <span class="menu-title">Settings</span>
+              <!-- <i class="menu-arrow"></i> -->
+            </a>
+             
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#error" aria-expanded="false" aria-controls="error">
+              <i class="icon-ban menu-icon"></i>
+              <span class="menu-title">Logout</span>
+              <!-- <i class="menu-arrow"></i> -->
+            </a>
+            
+          </li>
+        
+        </ul>
+      </nav>
+      <!-- partial -->
+      <div class="main-panel">
+        {% block content %}
+
+        {% endblock %}
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+
+    <!-- plugins:js -->
+    <script src="{% static 'vendors/js/vendor.bundle.base.js' %}"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <script src="{% static 'vendors/chart.js/Chart.min.js' %}"></script>
+    <script src="{% static 'vendors/datatables.net/jquery.dataTables.js' %}"></script>
+    <script src="{% static 'vendors/datatables.net-bs4/dataTables.bootstrap4.js' %}"></script>
+    <script src="{% static 'js/dataTables.select.min.js' %}"></script>
+
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="{% static 'js/off-canvas.js' %}"></script>
+    <script src="{% static 'js/hoverable-collapse.js' %}"></script>
+    <script src="{% static 'js/template.js' %}"></script>
+    <script src="{% static 'js/settings.js' %}"></script>
+    <script src="{% static 'js/todolist.js' %}"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page-->
+    <script src="{% static 'js/dashboard.js' %}"></script>
+    <script src="{% static 'js/Chart.roundedBarCharts.js' %}"></script>
+    <!-- End custom js for this page-->
+</body>
+
 </html>

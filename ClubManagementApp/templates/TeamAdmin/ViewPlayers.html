@@ -2,27 +2,48 @@
 
 {% block content%}
 <div class="container">
-    {% for player in players_list %}
+   {% if players_list %}
+<div class="row">
+   <div class="col-md-12">
+    <h2 class="text-primary" style="margin-top: 20px; margin-left: 390px;">Players List</h2>
 
-    <div class="col-md-3 column">
-        <div class="card">
-           <img class="img-responsive" src="{{player.player_img.url}}" alt="{{player.player_name}}" style="width:100%;height:250px">
-           <div class="">
-              <h4 style="margin-top: 10px;">{{player.player_name|title}}</h4>
-              <p class="title h4">{{player.player_position|capfirst}}</p>
-              <p>
-              <div class="center">
-                  
-                <a href="{% url 'club_management:edit_player' player.player_id %}" class="btn btn-primary" style="margin-left: 10px;margin-right: 5px;">Edit</a>
-                <a href="{% url 'club_management:view_player' player.player_id %}" value="View" class="btn btn-primary" style="margin-right: 4px;">View</a>
-                <a href="{% url 'club_management:delete_player' player.player_id %}" value="delete" class="btn btn-primary">Delete</a>
-            
+   </div>
+</div>
+   <div class="row" style="margin-top: 40px;">
+      {% for player in players_list %}
+      <div class="col-md-3 column">
+         <div class="card">
+            <img class="img-responsive" src="{{player.player_img.url}}" alt="{{player.player_name}}" style="width:80%;height:220px;border-radius: 10px;">
+            <div class="">
+               <h4 style="margin-top: 20px;margin-left: 60px;">{{player.player_name|title}}</h4>
+               <p class="title h4" style="margin-top: 10px;margin-left: 30px; margin-bottom: 20px;">{{player.player_position|capfirst}}</p>
+               <p>
+               <div class="center">
+                   
+ 
+                 <a href="{% url 'club_management:view_player' player.player_id %}" value="View" class="btn btn-primary" style="margin-right: 4px;">View</a>
+                 <a href="{% url 'club_management:delete_player' player.player_id %}" value="delete" class="btn btn-danger">Delete</a>
+             
+             </div>
+               </p>
             </div>
-              </p>
-           </div>
-        </div>
-     </div>
- {% endfor %}  
+         </div>
+
+         
+      </div>
+
+      
+      {% endfor %}
+   </div>
+
+    
+
+      
+   
+
+ {% else %}  
+ <h2 class="text-danger" style="margin-top:100px;margin-left:220px">No Players Added Yet</h2>
+ {% endif %}
  </div>
 
 {% endblock %}

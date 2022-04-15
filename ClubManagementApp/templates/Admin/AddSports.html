@@ -1,19 +1,24 @@
 {% extends 'Admin/AdminMaster.html' %}
 
 {% block page_content %}
-    <form action="{% url 'club_management:add_sport' %}" method="POST" class ="f1"  >
+<div class="container">
+    <h2 class="text-primary" style="margin-left: 290px;margin-top: 30px;">Add Sport</h2>
+    <form action="{% url 'club_management:add_sport' %}" method="POST" style="margin-top: 40px;">
         {% csrf_token %}
     
-        <table class ="tb">
+        <table style="margin-left: 100px;border-collapse: separate;border-spacing: 10px;">
             <tr>
-                <td>{{form.sport_name.label}}</td>
-                <td>{{form.sport_name}}</td>
+                <td>Sport Name</td>
+                <td><input type="text" required class="form-control"  name="sp_name" id=""></td>
                 
             </tr>
 
             <tr>
-                <td>{{form.sport_type.label}}</td>
-                <td>{{form.sport_type}}</td>
+                <td>Type</td>
+                <td><select name="sp_type" id="" class="form-control">
+                    <option value="m">Male</option>
+                    <option value="f">Female</option>
+                </select></td>
             </tr>
             <tr>
                 <td></td>
@@ -49,7 +54,7 @@
 
 {% if sports %}
 <form class="f1">
-    <table class="tb">
+    <table class="table table-primary">
         <thead>
             <tr>
                 <th>Sports Name</th>
@@ -71,7 +76,7 @@
         
     </table>
 </form>
-
+</div>
 {% else %}
 <p>No Data Found</p>
 {% endif %}

@@ -1,0 +1,99 @@
+{% extends 'TeamAdmin/TeamAdminMaster.html' %}
+{% load humanize %}
+{% block content%}
+    <div class="container" style="min-height: 300px;">
+        <div class="row">
+            <div class="col-md-12">
+    <h2 class="text-primary" style="margin-top: 26px; margin-left: 350px;">{{tournament.tournament_title|title}}</h2>
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <form action="" method="POST">
+                    {% csrf_token %}
+                <table class="table table-hover" style="margin-top: 20px;">
+                     
+                <tr >
+                    <td style="font-size: large;">Title </td>
+                    <td style="font-size: large;">: </td>
+                    <td style="font-size: large;">{{tournament.tournament_title|title }}</td>
+                </tr>
+
+                <tr >
+                    <td style="font-size: large;">Start Date</td>
+                    <td style="font-size: large;">: </td>
+                    <td style="font-size: large;">{{tournament.start_date }}</td>
+                </tr>
+                <tr >
+                    <td style="font-size: large;">End Date</td>
+                    <td style="font-size: large;">: </td>
+                    <td style="font-size: large;">{{tournament.end_date }}</td>
+                </tr>
+                <tr >
+                    <td style="font-size: large;">Last Date For Registration</td>
+                    <td style="font-size: large;">: </td>
+                    <td style="font-size: large;">{{tournament.reg_date }}</td>
+                </tr>
+                <tr >
+                    <td style="font-size: large;">Max Players Allowed</td>
+                    <td style="font-size: large;">: </td>
+                    <td style="font-size: large;">{{tournament.players_allowed}} Nos</td>
+                </tr>
+                <tr >
+                    <td style="font-size: large;">Registration Fee</td>
+                    <td style="font-size: large;">: </td>
+                    <td style="font-size: large;">{{tournament.reg_fee}} Rs</td>
+                </tr>
+                <tr >
+                    <td style="font-size: large;">Win Prize</td>
+                    <td style="font-size: large;">: </td>
+                    <td style="font-size: large;">{{tournament.win_prize}} Rs</td>
+                </tr>
+                <tr >
+                    <td style="font-size: large;">Registration Status</td>
+                    <td style="font-size: large;">: </td>
+
+                    
+                    <td style="font-size: large;color:{{color}};">  {{status}}</td>
+
+                     
+                   
+
+                     
+                </tr>
+                <tr >
+                    <td style="font-size: large;"> </td>
+                    <td style="font-size: large;">  </td>
+
+                    
+                    <td style="font-size: large;color:{{color}};">
+                        {% if status == 'Registered' %}
+                    <a href="{% url 'club_management:t_players' tournament.tournament_id %}" class="btn btn-primary" name="add_players" id="">
+                      Add Players
+                    </a>
+                    {% else %}
+                    <input type="submit" value="Register Now" class="btn btn-primary" name="register" id="">
+                    
+                {% endif %}
+                </td>
+
+                     
+                   
+
+                     
+                </tr>
+                </table>
+            </form>
+               
+            </div>
+        </div>
+
+</div>
+
+
+
+{% endblock %}
+
+

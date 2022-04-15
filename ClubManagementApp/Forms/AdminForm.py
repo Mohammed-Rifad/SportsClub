@@ -13,7 +13,7 @@ class LoginForm(forms.Form):
 
 class AddSportForm(forms.ModelForm):
     
-    sport_name=forms.CharField(label="Sport Name",widget=forms.TextInput(attrs={'style':'width:200px',}))
+    sport_name=forms.CharField(label="Sport Name",widget=forms.TextInput(attrs={'style':'width:200px','class':'form-control'}))
     
     class Meta:
         model=SportsDetail

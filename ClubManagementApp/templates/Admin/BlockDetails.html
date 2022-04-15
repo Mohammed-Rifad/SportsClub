@@ -1,6 +1,8 @@
 {% extends 'Admin/AdminMaster.html' %}
 {% block page_content %}
   
+<div class="container">
+    <h2 class="text-primary" style="margin-left: 290px;margin-top: 30px;">Block Details</h2>
 <div>
     <img src="{{block.venue_id.venue_seat.url}}">
 </div>
@@ -18,6 +20,6 @@
 </tr>
 
 </table>
-
+</div>
 
 {% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'Venue/VenueMaster.html' %}
+
+{% block content%}
+<div class="container" style="min-height: 300px;">
+
+    <div class="row" >
+        <div class="col-md-12">
+            <h3 class="text-danger">Reject Reason</h3>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 60px;">
+        <div class="col-md-4"></div>
+        <div class="col-md-7">
+            <table style="border-spacing: 10px;border-collapse: separate;">
+                <tr>
+                    <td>Reason</td>
+                    <td><textarea class="form-control" name="reason" id="" cols="22" rows="5"></textarea></td>
+                </tr>
+        <tr>
+            <td></td>
+            <td><input type="submit" value="Submit" class="btn btn-primary" name="" id=""></td>
+        </tr>
+        
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -8,7 +8,15 @@ from ..models import AdminNotification,SportsDetail, TeamDetails, VenueDetails,T
 from ClubManagementApp.Forms.AdminForm import *
 
 def AdminHome(request):
-    return render(request,'Admin/AdminHome.html')
+    count=VenueDetails.objects.filter(venue_status="approved").count()
+    notfn=AdminNotification.objects.all()[:5]
+    pending_teams=TeamDetails.objects.filter(team_status='not approved').count()
+    approved_teams=TeamDetails.objects.filter(team_status='approved').count()
+    ongoing_tournaments=TournamentDetails.objects.filter(tournament_status='not completed')
+    
+    return render(request,'Admin/AdminHome.html',{'count':count,'ongoing_tournaments':ongoing_tournaments,'notfn':notfn,'p_count':pending_teams,
+    'app_count':approved_teams
+    })
 
 def AddSport(request):
     form=AddSportForm()
@@ -75,6 +83,7 @@ def ViewTeams(request):
 
 def ViewVenue(request):
     venues=VenueDetails.objects.filter(venue_status="approved")
+    
     return render(request,'Admin/ViewVenue.html',{'venues':venues})
 
 
@@ -82,18 +91,18 @@ def ViewVenue(request):
 def AddNotification(request):
     form=AdminNotificationform()
     if request.method=='POST':
-        form=AdminNotificationform(request.POST)
-        if form.is_valid():
-            print('valid')
-            notfn_title=form.cleaned_data['notfn_title']
-            notfn_text=form.cleaned_data['notfn_content']
-            notfn_date=date.today()
-            qry=AdminNotification(notfn_title=notfn_title,notfn_date=notfn_date,notfn_content=notfn_text)
-            qry.save()
-            msg="Notification Submitted Succesfully"
-            return render(request,'Admin/AddNotifications.html',{'form':form,'msg':msg})
-        else:
-            print(form.errors)
+ 
+        notfn_title=request.POST['notfn_title']
+        notfn_text=request.POST['notfn_content']
+        notfn_date=date.today()
+        d=notfn_date.strftime('%Y-%m-%d')
+        st_con=datetime.strptime(d,'%Y-%m-%d').date()
+        st_dt=str(st_con.day)+'/'+str(st_con.month)+'/'+str(st_con.year)
+        qry=AdminNotification(notfn_title=notfn_title,notfn_date=st_dt,notfn_content=notfn_text)
+        qry.save()
+        msg="Notification Submitted Succesfully"
+        return render(request,'Admin/AddNotifications.html',{'form':form,'msg':msg})
+        
     return render(request,'Admin/AddNotifications.html',{'form':form})
 
 def ViewBlock(request,venue_id):
@@ -103,16 +112,14 @@ def ViewBlock(request,venue_id):
 
 def ViewPlayers(request,team_id):
     players_list=PlayerDetails.objects.filter(team_id=team_id)
-    return render(request,'Admin/ViewPlayers.html',{'players':players_list})
+    team=TeamDetails.objects.get(team_id=team_id)
+    return render(request,'Admin/ViewPlayers.html',{'players':players_list,'team':team.team_name})
 
 def AddTournament(request):
-    
+     
     sport_type=SportsDetail.objects.all()
-    # dt="23/02/2022"
-    # con_dt=datetime.strptime(dt,"%d/%m/%Y")
-    # print(type(con_dt))
-    # print(dt==strftime("%d/%m/%Y"))
-    
+     
+     
     if request.method=='POST':
         
        
@@ -147,27 +154,33 @@ def AddTournament(request):
         print('end date',en_con)
         print('reg date',reg_con)
 
-        print('dddddddddd',type(start_date))
+         
         if st_con<cur_date:
-            msg="Invalid Date Selection"
+            err_msg="Invalid Date Selection"
             print('first')
-            return render(request,'Admin/TournamentAdd.html',{'sport_type':sport_type,'msg':msg})  
+            return render(request,'Admin/TournamentAdd.html',{'sport_type':sport_type,'err_msg':err_msg,'is_display':True})  
 
         elif st_con>en_con:
             print('second')
-            msg="Invalid Date Selection"
-            return render(request,'Admin/TournamentAdd.html',{'sport_type':sport_type,'msg':msg})  
+            err_msg="Invalid Date Selection"
+            return render(request,'Admin/TournamentAdd.html',{'sport_type':sport_type,'err_msg':err_msg, 'is_display':True})  
         
         elif reg_con<st_con or reg_con>en_con:
-            print('third') 
-            msg="Invalid Date Selection"
-            return render(request,'Admin/TournamentAdd.html',{'sport_type':sport_type,'msg':msg})   
+            print('third')
+            err_msg="Invalid Date Selection"
+            return render(request,'Admin/TournamentAdd.html',{'sport_type':sport_type, 'err_msg':err_msg,'is_display':True})   
         else:
-            qry=TournamentDetails(tournament_title=tournament_title,venue_id=venue_id,sport_type=sport_id,players_allowed=players_allowed,start_date=start_date,end_date=end_date,reg_date=reg_date,reg_fee=reg_fee,win_prize=win_prize,tournament_status="not completed")
+            st_dt=str(st_con.day)+'/'+str(st_con.month)+'/'+str(st_con.year)
+            en_dt=str(en_con.day)+'/'+str(en_con.month)+'/'+str(en_con.year)
+            reg_dt=str(reg_con.day)+'/'+str(reg_con.month)+'/'+str(reg_con.year)
+
+            qry=TournamentDetails(tournament_title=tournament_title,venue_id=venue_id,sport_type=sport_id,players_allowed=players_allowed,start_date=st_dt,end_date=en_dt,reg_date=reg_dt,reg_fee=reg_fee,win_prize=win_prize,tournament_status="not completed")
             qry.save()
             msg="Tournament Added Succesfully"  
-            return render(request,'Admin/TournamentAdd.html',{'sport_type':sport_type,'msg':msg})  
-    return render(request,'Admin/TournamentAdd.html',{'sport_type':sport_type})
+             
+            print('success')
+            return render(request,'Admin/TournamentAdd.html',{'sport_type':sport_type,'msg':msg,'is_success':True})  
+    return render(request,'Admin/TournamentAdd.html',{'sport_type':sport_type, })
 
 def getVenue(request):
     sport_id=request.GET.get('sport_id')
@@ -186,27 +199,46 @@ def TournamentRequest(request):
 
 def TournamentTeams(request):
     teams=TournamentRegistration.objects.filter(tournament_id=request.GET['id'])
-    print(teams)
-    return render(request, 'Admin/RegTeam.html',{'teams':teams,})
+    tr_name=TournamentDetails.objects.get(tournament_id=request.GET['id'])
+    return render(request, 'Admin/RegTeam.html',{'teams':teams,'name':tr_name.tournament_title})
 
 def ViewTournamentPlayers(request):
+    if request.method=='POST':
+         TournamentRegistration.objects.filter(tournament_id=request.session['tr'],team_id=request.session['t']).update(
+             team_status='approved'
+         )
+         return redirect('club_management:admin_home')
+    hide_btn=True
     if 't_id' in request.GET:
         team=request.GET['t_id']
         tournament=request.GET['tr_id']
         request.session['t']=team
         request.session['tr']=tournament
     players_list=TournamentPlayers.objects.filter(team_id=request.session['t'],tournament_id=request.session['tr'])
-    return render(request, 'Admin/TrTeamPlayers.html',{'players_list':players_list,})
+    for p in players_list:
+        if p.player_status=='not approved' or p.player_status=='rejected':
+            hide_btn=False
+            print('here')
+            break
+    
+    return render(request, 'Admin/TrTeamPlayers.html',{'players_list':players_list,'hide_btn':hide_btn})
 
 def UpdatePlayerStatus(request):
+
     player=request.POST['pl']
     if 'approve' in request.POST:
         record=TournamentPlayers.objects.get(player_id=player,tournament_id=request.session['tr'])
         record.player_status='approved'
         record.save()
         return redirect('club_management:a_viewtrTeam')
+
     if 'reject' in request.POST:
         record=TournamentPlayers.objects.get(player_id=player,tournament_id=request.session['tr'])
         record.player_status='rejected'
         record.save()
         return redirect('club_management:a_viewtrTeam')
+
+
+def GenerateFixture(request):
+    tr_data=TournamentDetails.objects.filter(tournament_status='not completed')
+    return render(request,'Admin/GenerateFixture.html',{'tr_data':tr_data,})

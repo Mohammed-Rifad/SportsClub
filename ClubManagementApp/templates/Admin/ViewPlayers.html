@@ -2,28 +2,43 @@
 {% block page_content %}
     
 <div class="container">
-    {% for player in players %}
+   
+   {% if players %}
+   <div class="row" style="margin-top: 40px;margin-bottom: 40px;">
+      <div class="col-md-12">
 
-    <div class="row">
-    <div class="col-md-3 column">
-        <div class="card">
-           <img class="img-responsive" src="{{player.player_img.url}}" alt="{{player.player_name}}" style="width:100%;height:250px">
-           <div class="">
-              <h4 style="margin-top: 10px;">{{player.player_name|title}}</h4>
-              <p class="title h4">{{player.player_position|capfirst}}</p>
-              <p>
-              <div class="center">
-                  
-              
-                <a href="{% url 'club_management:view_player' player.player_id %}" value="View" class="btn btn-primary" style="margin-right: 4px;">View</a>
-                
-            
-            </div>
-              </p>
+               <h3 style="margin-left: 240px;" class="text-danger">{{team|title}} Players List</h3> 
+      </div>
+   </div>
+   <div class="row">
+
+   {% for player in players %}
+
+   
+   <div class="col-md-3 ">
+       <div class="card">
+          <img class="img-responsive" src="{{player.player_img.url}}" alt="{{player.player_name}}" style="width:100%;height:250px">
+          <div class="">
+             <h4 style="margin-top: 10px;">{{player.player_name|title}}</h4>
+             <p class="title h4">{{player.player_position|capfirst}}</p>
+             <p>
+             <div class="center">
+                 
+             
+               <a href="{% url 'club_management:view_player' player.player_id %}" value="View" class="btn btn-primary" style="margin-right: 4px;">View</a>
+               
+           
            </div>
-        </div>
-     </div>
+             </p>
+          </div>
+       </div>
     </div>
-     {% endfor %}
+   
+    {% endfor %}
+   </div>
+      {% else %}
+   <h2 style="margin-top: 200px;margin-left: 200px;color: red;"> No players added yet</h2>
+
+   {% endif %}
 
 {% endblock %}

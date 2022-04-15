@@ -1,0 +1,60 @@
+{% extends 'Venue/VenueMaster.html' %}
+
+{% block content%}
+
+
+<div style="min-height: 300px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h3 class="text-danger">Tournament Name</h3>
+            </div>
+
+        </div>
+        <div class="row" style="margin-top: 40px;">
+            <div class="col-md-4"></div>
+            <div class="col-md-7">
+                <table style="border-spacing: 10px;border-collapse: separate;">
+                    <tr>
+                        <td>
+                            Select Block
+                        </td>
+                        <td><select name="block" id="" class="form-control">
+                                {% for b in block %}
+                                <option value="{{b.id}}">{{b.block_title|title}}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Select Date
+                        </td>
+                        <td>
+                            <input type="date" name="date" id="" class="form-control">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><input type="submit" value="Search" class="btn btn-danger" name="" id=""></td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+        <div class="row" style="margin-top: 10px;">
+            <div class="col-md-12">
+                    <table class="table table-primary">
+                        <tr>
+                            <th>S.No</th>
+                            <th>Name</th>
+                            <th>Mobile</th>
+                            <th>Booking Date</th>
+                            <th>Booking No</th>
+                        </tr>
+                    </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -2,16 +2,19 @@
 
 {% block page_content %}
 
-<form action="{% url 'club_management:add_notification' %}" method="POST" class="f1">
+<div class="container">
+    <h2 class="text-primary" style="margin-left: 290px;margin-top: 30px;">Add Notification
+    </h2>
+<form action="{% url 'club_management:add_notification' %}" method="POST" style="margin-left: 220px;margin-top: 30px;">
     {% csrf_token %}
-    <table class="tb">
+    <table class="tb" style="border-spacing: 10px;border-collapse: separate;">
         <tr>
-            <td>{{form.notfn_title.label}}</td>
-            <td>{{form.notfn_title}}</td>
+            <td>Title</td>
+            <td><input type="text" required name="notfn_title" class="form-control" id=""></td>
         </tr>
         <tr>
-            <td>{{form.notfn_content.label}}</td>
-            <td>{{form.notfn_content}}</td>
+            <td>Subject</td>
+            <td><textarea name="notfn_content" required id="" class="form-control" cols="30" rows="5"></textarea></td>
         </tr>
         <tr>
             <td></td>
@@ -20,32 +23,34 @@
         </tr>
        
     </table>
-   <p id="msg" class="alert alert-success msg">{{msg}}</p>
+    {% if msg %}
+   <p id="msg" class="alert alert-success msg" style="width: 400px;">{{msg}}</p>
+   {% endif %}
 </form>
-
+</div>
 <script>
-     $(document).ready(function () {
-      var title=  document.getElementById("id_notfn_title")?document.getElementById("id_notfn_title").value="":null;
-     var content=    document.getElementById("id_notfn_content")?document.getElementById("id_notfn_content").value="":null;
-     var msg  = document.getElementById("msg")?document.getElementById("msg").value="":null;
-         $("input").focus(()=>{
+    //  $(document).ready(function () {
+    //   var title=  document.getElementById("id_notfn_title")?document.getElementById("id_notfn_title").value="":null;
+    //  var content=    document.getElementById("id_notfn_content")?document.getElementById("id_notfn_content").value="":null;
+    //  var msg  = document.getElementById("msg")?document.getElementById("msg").value="":null;
+    //      $("input").focus(()=>{
             
-            if(msg==null)
-            {
-                alert(msg)
-                document.getElementById('msg').setAttribute("style", "display:none");
-            document.getElementById('msg').innerHTML = "";
-        }
+    //         if(msg==null)
+    //         {
+    //             alert(msg)
+    //             document.getElementById('msg').setAttribute("style", "display:none");
+    //         document.getElementById('msg').innerHTML = "";
+    //     }
         // if(msg!=null)
         // {
         //     document.getElementById('msg').setAttribute("style", "display:none");
         // }
-    });     
+    // });     
            
             
 
-    }
+    // }
       
-     );
+    //  );
 </script>
 {% endblock %}

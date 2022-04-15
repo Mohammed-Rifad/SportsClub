@@ -1,48 +1,59 @@
 {% extends 'Admin/AdminMaster.html' %}
 
 {% block page_content %}
+<div class="container">
 
-
-<form action="" method="POST" class="f1">
+    <div class="row">
+        <div class="col-md-12" style="margin-top: 40px;">
+            <form action="" method="POST" class="f1">
     
-    <table style="border-spacing: 10px;border-collapse: separate;">
-        <tr class="h4">
-            <td>Select Tournament</td>
-            <td><select name="" class="form-control" id="">
-                {% for t in t_data %}
-                <option value="">{{t.tournament_title|title}}</option>
-                {% endfor %}
-            </select></td>
+                <table style="border-spacing: 10px;border-collapse: separate;">
+                    <tr class="h4">
+                        <td>Select Tournament</td>
+                        <td><select name="" class="form-control" id="">
+                            {% for t in t_data %}
+                            <option value="">{{t.tournament_title|title}}</option>
+                            {% endfor %}
+                        </select></td>
+            
+                         
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><input type="submit" class="btn btn-primary" value="Search" name="search" id=""></td>
+                    </tr>
+                </table>
+            
+                </form>
+        </div>
+    </div>
 
-             
-        </tr>
-        <tr>
-            <td></td>
-            <td><input type="submit" class="btn btn-primary" value="Search" name="search" id=""></td>
-        </tr>
-    </table>
+    <div class="row">
+        <div class="col-md-12">
+            <form action="" method="POST" class="f1">
 
-    </form>
+                <table style="border-spacing: 10px;border-collapse: separate; margin-top: 20px;" class="table table-hover">
+                    <tr class="h4">
+                        <th>Tournament</th>
+                        <th>Venue</th>
+                        <th></th>
+                         
+                    </tr>
+                    {% for t in t_data %}
+                    <tr>
+                        <td>{{t.tournament_title|title}}</td>
+                        <td>{{t.venue_id.venue_name|title}}</td>
+                        <td><a href="/SCMS/Admin/TrTeams?id={{t.tournament_id}}">Registered Teams</a></td>
+                        <!-- <td><input type="hidden" name="t_id" value="{{t.tournament_id}}" id=""></td> -->
+                    </tr>
+                    {% endfor %}
+                </table>
+            
+                </form>
+        </div>
+    </div>
 
 
-<form action="" method="POST" class="f1">
 
-    <table style="border-spacing: 10px;border-collapse: separate; margin-top: 20px;" class="table table-hover">
-        <tr class="h4">
-            <td>Tournament</td>
-            <td>Venue</td>
-            <td></td>
-             
-        </tr>
-        {% for t in t_data %}
-        <tr>
-            <td>{{t.tournament_title|title}}</td>
-            <td>{{t.venue_id.venue_name|title}}</td>
-            <td><a href="/SCMS/Admin/TrTeams?id={{t.tournament_id}}">Registered Teams</a></td>
-            <!-- <td><input type="hidden" name="t_id" value="{{t.tournament_id}}" id=""></td> -->
-        </tr>
-        {% endfor %}
-    </table>
-
-    </form>
+</div>
 {% endblock %}

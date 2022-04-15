@@ -1,3 +1,7 @@
+from datetime import date, datetime
+from faulthandler import disable
+from re import T
+from time import strftime
 from ClubManagementApp.Forms.TeamForm import AddPlayerForm
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
@@ -8,16 +12,13 @@ from django.utils.crypto import get_random_string
 from ..services import email_player, email_team
 
 def TeamHome(request):
-    # print(request.session['team_id'])
-    # data=SportsDetail.objects.get(sport_id=request.session['team_type'])
-    # print(data.sport_name)
-    return render(request,'TeamAdmin/TeamHome.html')
+    players=PlayerDetails.objects.filter(team_id=request.session['team_id']).count()
+    return render(request,'TeamAdmin/TeamHome.html',{'players':players,})
 
 
 def AddPlayer(request):
    
-    # player=PlayerDetails.objects.get(player_id=1)
-    # print(player.player_img.url)
+    
     form=AddPlayerForm()
     data=SportsDetail.objects.get(sport_id=request.session['team_type'])
     sport_type=data.sport_name
@@ -28,41 +29,41 @@ def AddPlayer(request):
     
 
     if request.method=='POST':
-        print('here')
-        form=AddPlayerForm(request.POST,request.FILES)
-        if form.is_valid():
-            team_id=TeamDetails.objects.get(team_id=request.session['team_id'])
-            player_name=form.cleaned_data['player_name'].lower()
-            player_address=form.cleaned_data['player_address'].lower()
-            player_dob=form.cleaned_data['player_dob']
-            player_email=form.cleaned_data['player_email']
-            player_height=form.cleaned_data['player_height']
-            player_weight=form.cleaned_data['player_weight']
-            player_img=form.cleaned_data['player_img']
-            player_ph=form.cleaned_data['player_ph']
-            player_position=request.POST['position']
-            passwd=get_random_string(length=8)
-            player_passwd=pbkdf2_sha256.hash(passwd,rounds=1000,salt_size=32)
-            email_exists=PlayerDetails.objects.filter(player_email=player_email).exists()
-            
-            if email_exists:
-                msg="Email Already Exists"
-                return render(request,'TeamAdmin/AddPlayer.html',{'form':form,'positions':positions,'msg':msg})
-            
-            phno_exists=PlayerDetails.objects.filter(player_ph=player_ph).exists()
-            if phno_exists:
-                msg="Phone No. Already Exists"
-                return render(request,'TeamAdmin/AddPlayer.html',{'form':form,'positions':positions,'msg':msg})
+        
+        
+        team_id=TeamDetails.objects.get(team_id=request.session['team_id'])
+        player_name=request.POST['p_name'].lower()
+        player_address=request.POST['p_addr'].lower()
+        player_dob=request.POST['p_dob']
+        player_email=request.POST['p_email']
+        player_height=request.POST['p_height']
+        player_weight=request.POST['p_weight']
+        player_img=request.FILES['p_img']
+        player_ph=request.POST['p_phno']
+        player_position=request.POST['position']
+        dt_con=datetime.strptime(player_dob,'%Y-%m-%d').date()
+        dob=str(dt_con.day)+'/'+str(dt_con.month)+'/'+str(dt_con.year)
+        passwd=get_random_string(length=8)
+        player_passwd=pbkdf2_sha256.hash(passwd,rounds=1000,salt_size=32)
+        email_exists=PlayerDetails.objects.filter(player_email=player_email).exists()
+        
+        if email_exists:
+            err_msg="Email Already Exists"
+            return render(request,'TeamAdmin/AddPlayer.html',{'form':form,'positions':positions,'err_msg':err_msg})
+        
+        phno_exists=PlayerDetails.objects.filter(player_ph=player_ph).exists()
+        if phno_exists:
+            err_msg="Phone No. Already Exists"
+            return render(request,'TeamAdmin/AddPlayer.html',{'form':form,'positions':positions,'err_msg':err_msg})
 
-            qry=PlayerDetails(team_id=team_id,player_name=player_name,player_address=player_address,player_dob=player_dob,player_email=player_email,player_ph=player_ph,player_position=player_position,player_height=player_height,player_weight=player_weight,player_img=player_img,player_passwd=player_passwd)
-            qry.save()
-            msg="Player Added Succesfully"
-            print('passwd is',passwd)
-            #email_player(player_email,player_ph,passwd)
+        qry=PlayerDetails(team_id=team_id,player_name=player_name,player_address=player_address,player_dob=dob,player_email=player_email,player_ph=player_ph,player_position=player_position,player_height=player_height,player_weight=player_weight,player_img=player_img,player_passwd=player_passwd)
+        qry.save()
+        succ_msg="Player Added Succesfully"
+        print('passwd is',passwd)
+        #email_player(player_email,player_ph,passwd)
             
-            return render(request,'TeamAdmin/AddPlayer.html',{'form':form,'positions':positions,'msg':msg})
-        else:
-            print(form.errors)
+        return render(request,'TeamAdmin/AddPlayer.html',{'form':form,'positions':positions,'succ_msg':succ_msg})
+         
     return render(request,'TeamAdmin/AddPlayer.html',{'form':form,'positions':positions})
 
 def ViewPlayers(request):
@@ -85,20 +86,59 @@ def ViewPlayer(request,id):
 
 
 def ViewTournaments(request):
+     
+    print(request.session['not'])
     tournament_data=TournamentDetails.objects.filter(tournament_status='not completed')
-    # is_registered=TournamentRegistration.objects.filter(tournament_id=)
+    # if 'not' in request.session:
+         
+    #     if request.session['not'] == 1:
+    #         pass
+    #     else:
+    #          request.session['not']=2
+    #     return render(request,'TeamAdmin/ViewTournaments.html',{'tournaments':tournament_data, })
 
+    
+    
+    
     return render(request,'TeamAdmin/ViewTournaments.html',{'tournaments':tournament_data,})
 
 
+def TournamentDetail(request,t_id):
+
+    if request.method=='POST':
+        print('here')
+        if 'register' in request.POST:
+            print('success')
+            tournament=TournamentDetails.objects.get(tournament_id=t_id)
+            team=TeamDetails.objects.get(team_id=request.session['team_id'])
+            registration=TournamentRegistration(tournament_id=tournament,team_id=team)
+            registration.save()
+
+         
+
+    tournament_data=TournamentDetails.objects.get(tournament_id=t_id)
+    is_registered=TournamentRegistration.objects.filter(tournament_id=t_id,team_id=request.session['team_id']).exists()
+    if is_registered == True:
+        status='Registered'
+        color="green"
+    else:
+        status='Not Registered'
+        color='red'
+    
+    
+    return render(request,'TeamAdmin/TournamentDetails.html',{'tournament':tournament_data,'status':status,'color':color})
 
 
 def AddTournamentPlayers(request,id):
+
+  
+
     tournament=TournamentDetails.objects.get(tournament_id=id)
+    regstn=TournamentRegistration.objects.get(tournament_id=id)
     current_players=PlayerDetails.objects.filter(team_id=request.session['team_id'])
     added_players=TournamentPlayers.objects.filter(team_id=request.session['team_id'])
-    msg=""
-
+    succ_msg=""
+    err_msg=""
     current_count=TournamentPlayers.objects.filter(tournament_id=tournament.tournament_id,team_id=request.session['team_id']).count()
     approved=False
     for p in added_players:
@@ -106,13 +146,12 @@ def AddTournamentPlayers(request,id):
         if p.player_status=='not approved' or p.player_status=='rejected':
             
             approved=True
-            break;
+            break 
 
-    print(approved)
+    
     if request.method=='POST':
 
-        if 'checkout' in request.POST:
-            pass
+         
 
         if 'del' in request.POST:
             t_id=request.POST['tid']
@@ -138,30 +177,49 @@ def AddTournamentPlayers(request,id):
 
                     data=TournamentPlayers(player_id=player_id,tournament_id=tournament_id,team_id=team_id,cert=file)
                     data.save()   
-                    msg="Player Added Succesfully"
+                    succ_msg="Player Added Succesfully"
+                    tournament=TournamentDetails.objects.get(tournament_id=id)
+                    regstn=TournamentRegistration.objects.get(tournament_id=id)
+                    current_players=PlayerDetails.objects.filter(team_id=request.session['team_id'])
+                    added_players=TournamentPlayers.objects.filter(team_id=request.session['team_id'])
+                     
+                    err_msg=""
+                    current_count=TournamentPlayers.objects.filter(tournament_id=tournament.tournament_id,team_id=request.session['team_id']).count()
+                    approved=False
+                    for p in added_players:
+                        
+                        if p.player_status=='not approved' or p.player_status=='rejected':
+                            
+                            approved=True
+                            break    
+
                 else:
-                    msg="Maximum Players Exceeded"
+                    err_msg="Maximum Players Exceeded"
         
             else:
-                msg="Player Already Added"
+                err_msg="Player Already Added"
 
-    if request.method=='GET':
+    # if request.method=='GET':
          
-        exist=TournamentRegistration.objects.filter(tournament_id=id,team_id=request.session['team_id']).exists()
-        if not exist:
+    #     exist=TournamentRegistration.objects.filter(tournament_id=id,team_id=request.session['team_id']).exists()
+    #     if not exist:
              
-            tour=TournamentDetails.objects.get(tournament_id=id)
-            team=TeamDetails.objects.get(team_id=request.session['team_id'])
-            reg=TournamentRegistration(tournament_id=tour,team_id=team)
-            reg.save()
-    
+    #         tour=TournamentDetails.objects.get(tournament_id=id)
+    #         team=TeamDetails.objects.get(team_id=request.session['team_id'])
+    #         reg=TournamentRegistration(tournament_id=tour,team_id=team)
+    #         reg.save()
+           
+    #         print('redirecting')
+    #         return redirect('TeamHome/T-Players',id)
     team_registered=TournamentRegistration.objects.filter(team_id=request.session['team_id'],tournament_id=id).exists()
 
     context={
         'tournament':tournament,
         'cur_players':current_players,
+        'reg':regstn,
         'added_players':added_players,
-        'msg':msg,
+        'succ_msg':succ_msg,
+        'err_msg':err_msg,
         'team_resgistered':team_registered,
         'approved':approved
             }
@@ -174,6 +232,21 @@ def RegisteredTournaments(request):
     tournaments=TournamentRegistration.objects.filter(team_id=request.session['team_id'])
     return render(request,'TeamAdmin/TournamentRegistered.html',{'tournaments':tournaments,})
 
+
+def Fixtures(request,tid):
+    return render(request,'TeamAdmin/Fixtures.html')
+
+def LiveMatch(request,tid):
+    return render(request,'TeamAdmin/LiveMatch.html')
+
+def MatchStatus(request,tid):
+    return render(request,'TeamAdmin/MatchStatus.html')
+
+def PointsTable(request,tid):
+    return render(request,'TeamAdmin/PointTable.html')
+
+def PreviousMatches(request):
+    return render(request,'TeamAdmin/PreviousMatches.html')
 
 def Logout(request):
     del request.session['team_id']

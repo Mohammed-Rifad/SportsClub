@@ -68,7 +68,7 @@ class PlayerDetails(models.Model):
 
 class AdminNotification(models.Model):
     notfn_id=models.AutoField(primary_key=True,db_column="notfn_id")
-    notfn_date=models.DateField(db_column="notfn_date")
+    notfn_date=models.CharField(max_length=20,default="", db_column="notfn_date")
     notfn_title=models.CharField(max_length=120,db_column="notfn_title",default="")
     notfn_content=models.CharField(max_length=255,db_column="notfn_content")
 

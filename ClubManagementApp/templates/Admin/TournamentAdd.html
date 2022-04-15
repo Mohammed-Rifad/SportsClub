@@ -1,98 +1,108 @@
 {% extends 'Admin/AdminMaster.html' %}
 {% block page_content %}
-    
+<div class="container">
+    <h2 class="text-primary" style="margin-left: 290px;margin-top: 30px;">Add Tournament
+    </h2>
+    <form action="{% url 'club_management:add_tournament' %}" style="margin-left: 230px;" id="venue_reg" method="POST"
+        data-ward-list="{% url 'club_management:get_venue' %}">
+        {% csrf_token %}
+        {% if is_display %}
+        <div class="alert alert-danger" style="visibility: visible; width: 400px;margin-top:20px">{{err_msg}}
+        </div>
+        {% endif %}
+        {% if is_success %}
+        <div class="alert alert-success" style="visibility: visible; width: 400px;margin-top:20px">{{msg}}</div>
+        {% endif %}
 
-<form action="{% url 'club_management:add_tournament' %}" id="venue_reg" method="POST" data-ward-list="{% url 'club_management:get_venue' %}">
-    {% csrf_token %}
-{{msg}}
-    <table>
-        <tr>
-            <td>Tournament Title</td>
-            <td><input type="text" class="form-control" required name="t_title" id=""></td>
-        </tr>
-        <tr>
-            <td>Select Sport</td>
-            <td>
-                <select name="sport" id="sport" class="form-control" required>
-                    <option value="" selected disabled>Select Sports</option>
-                    {% for sport in sport_type %}
-                   <option value="{{sport.sport_id}}">{{sport.sport_name|title}} - {{sport.sport_type|capfirst}}</option>
-                {% endfor %}    
-                </select>
+        <table style="border-spacing: 10px;border-collapse: separate;margin-top: 20px;">
+            <tr>
+                <td>Tournament Title</td>
+                <td><input type="text" class="form-control" required name="t_title" id=""></td>
+            </tr>
+            <tr>
+                <td>Select Sport</td>
+                <td>
+                    <select name="sport" id="sport" class="form-control" required>
+                        <option value="" selected disabled>Select Sports</option>
+                        {% for sport in sport_type %}
+                        <option value="{{sport.sport_id}}">{{sport.sport_name|title}} - {{sport.sport_type|capfirst}}
+                        </option>
+                        {% endfor %}
+                    </select>
 
-            </td>
-        </tr>
-        
+                </td>
+            </tr>
 
-        <tr>
-            <td>Select Venue</td>
-            <td>
-                <select name="venue_list" required id="venue" class="form-control">
-                  
-                </select>
 
-            </td>
-        </tr>
+            <tr>
+                <td>Select Venue</td>
+                <td>
+                    <select name="venue_list" required id="venue" class="form-control">
 
-        <tr>
+                    </select>
+
+                </td>
+            </tr>
+
+            <tr>
             <tr>
                 <td>Max Players</td>
                 <td><input type="number" class="form-control" required name="p_no" id=""></td>
             </tr>
-        </tr>
-        <tr>
-            <td>Start Date</td>
-            <td><input type="date" class="form-control" required name="s_date" id=""></td>
-        </tr>
-        <tr>
-            <td>End Date</td>
+            </tr>
+            <tr>
+                <td>Start Date</td>
+                <td><input type="date" class="form-control" required name="s_date" id=""></td>
+            </tr>
+            <tr>
+                <td>End Date</td>
                 <td><input type="date" class="form-control" required name="e_date" id=""></td>
-        </tr>
-        <tr>
-            <td>Last Date For Registration</td>
-            <td><input type="date" class="form-control" required name="l_date" id=""></td>
-        </tr>
-        <tr>    
-            <td>Registration Fee</td>
+            </tr>
+            <tr>
+                <td>Last Date For Registration</td>
+                <td><input type="date" class="form-control" required name="l_date" id=""></td>
+            </tr>
+            <tr>
+                <td>Registration Fee</td>
                 <td><input type="number" class="form-control" required name="reg_fee" id=""></td>
-        </tr>
-        <tr>
-            <td>Prize Money</td>
-            <td><input type="number" class="form-control" required name="p_money" id=""></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td><input type="submit" value="Add" class="btn btn-primary"></td>
-        </tr>
-    </table>
-
+            </tr>
+            <tr>
+                <td>Prize Money</td>
+                <td><input type="number" class="form-control" required name="p_money" id=""></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="submit" value="Add" class="btn btn-primary"></td>
+            </tr>
+        </table>
+</div>
 <script>
 
-    $("#sport").change(function(){
-         
-    
-        const url = $("#venue_reg").attr("data-ward-list");
-        
-        const sport_id = $(this).val(); 
-       
+    $("#sport").change(function () {
 
-        $.ajax({                      
-        url: url,                    
-        data: {
-            'sport_id': sport_id      
-        },
-        success: function (data) {   
-            $("#venue").html(data);
-           
-           console.log(data)
-        }
+        
+        const url = $("#venue_reg").attr("data-ward-list");
+
+        const sport_id = $(this).val();
+
+
+        $.ajax({
+            url: url,
+            data: {
+                'sport_id': sport_id
+            },
+            success: function (data) {
+                $("#venue").html(data);
+                    console.log(data)
+                console.log(data)
+            }
+        });
+
+
+
+
     });
 
-
-    
-     
-      });
- 
 </script>
 
 </form>

@@ -1,7 +1,7 @@
 {% extends 'Venue/VenueMaster.html' %}
 
 {% block content%}
-       <form action="{% url 'club_management:add_block' %}" method=POST>
+       <form action="{% url 'club_management:add_block' %}" method="POST" style="margin-left: 100px;">
            {% csrf_token %}
 <table class="form-table">
     <tr>

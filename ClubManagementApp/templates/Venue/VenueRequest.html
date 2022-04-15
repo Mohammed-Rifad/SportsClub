@@ -1,0 +1,26 @@
+{% extends 'Venue/VenueMaster.html' %}
+
+{% block content%}
+<div class="container">
+
+<table class="table table-primary">
+    <tr>
+        <th>Tournament</th>
+        <th>Type</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th></th>
+    </tr>
+    {% for d in data %}
+    <tr align="center">
+       
+            <td>{{d.block_title|title}}</td>
+            <td> Rs {{d.amount}}</td>
+            <td>{{d.total_seats}} No{{d.total_seats|pluralize}}</td>
+    </tr>
+    {% endfor %}
+</table>
+</div>
+{% endblock %}
+
+

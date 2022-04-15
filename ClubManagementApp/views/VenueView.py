@@ -27,3 +27,24 @@ def AddBlock(request):
                 msg="Block Already Added"
                 return render(request,'Venue/AddBlock.html',{'form':form,'msg':msg})
     return render(request,'Venue/AddBlock.html',{'form':form})
+
+def ViewBlock(request):
+    data=BlockDetails.objects.filter(venue_id=request.session['venue_id'])
+     
+    return render(request,'Venue/ViewBlock.html',{'data':data})
+
+def ViewBooking(request):
+    block=BlockDetails.objects.filter(venue_id=request.session['venue_id'])
+    return render(request,'Venue/ViewBooking.html',{'block':block})
+
+def ChangePassword(request):
+    
+    return render(request,'Venue/ChangePassword.html')
+
+def VenueRequest(request):
+    
+    return render(request,'Venue/VenueRequest.html')
+
+def RejectReason(request):
+    
+    return render(request,'Venue/RejectReason.html')

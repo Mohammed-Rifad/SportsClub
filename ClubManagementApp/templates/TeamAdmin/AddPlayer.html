@@ -1,93 +1,198 @@
 {% extends 'TeamAdmin/TeamAdminMaster.html' %}
 
 {% block content%}
- <img src="{{player.player_img.url}}">
-<form action="{% url 'club_management:add_player' %}" method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-{{msg}}
-    <table style="margin-left: 240px; border-spacing: 10px;border-collapse: separate;"> 
-    <tr>
-        <td>
-            {{form.player_name.label}}
-        </td>
-        <td>
-            {{form.player_name}}
-        </td>
-    </tr>
-    <tr>
-        <td>
-            {{form.player_address.label}}
-        </td>
-        <td>
-            {{form.player_address}}
-        </td>
-    </tr>
-    <tr>
-        <td>
-            {{form.player_dob.label}}
-        </td>
-        <td>
-            {{form.player_dob}}
-        </td>
-    </tr>
-    <tr>
-        <td>
-            Player Position
-        </td>
-        <td>
-           <select name="position" class="form-control">
-               {% for position in positions %}
-               <option value="{{position|lower}}">{{position|title}}</option>
-               {% endfor %}
-           </select>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            {{form.player_email.label}}
-        </td>
-        <td>
-            {{form.player_email}}
-        </td>
-    </tr>
-    <tr>
-        <td>
-            {{form.player_ph.label}}
-        </td>
-        <td>
-            {{form.player_ph}}
-        </td>
-    </tr>
-    <tr>
-        <td>
-            {{form.player_height.label}}
-        </td>
-        <td>
-            {{form.player_height}}
-        </td>
-    </tr>
-    <tr>
-        <td>
-            {{form.player_weight.label}}
-        </td>
-        <td>
-            {{form.player_weight}}
-        </td>
-    </tr>
-    <tr>
-        <td>
-            {{form.player_img.label}}
-        </td>
-        <td>
-            {{form.player_img}}
-        </td>
-    </tr>
-    <tr>
-        <td></td>
-        <td><input type="submit" value="ADD" class="btn btn-primary"></td>
-    </tr>
-</table>
-</form>
+
+
+
+
+<div class="container">
+    <div class="row" style="margin-top: 40px; margin-left: 80px;margin-bottom: 20px;">
+        <div class="col-md-8">
+            <h2 style="margin-left: 240px;" class="text-primary">{{team|title}} Add Player</h2>
+        </div>
+        <div class="col-md-4">
+            {% if err_msg %}
+            <div class="alert alert-danger" id="err_msg" style=" width: 320px;margin-top:20px; height :50px">
+                <script>
+                    document.getElementById('err_msg').innerHTML = '{{err_msg}}'
+                    setTimeout(() => {
+                        document.getElementById('err_msg').setAttribute('style', 'display:none')
+                    }, 2000)
+
+                </script>
+
+            </div>
+            {% endif %}
+            {% if succ_msg %}
+            <div class="alert alert-success" id="succ_msg" style=" width: 320px;margin-top:20px;height: 50px;">
+                {{succ_msg}}</div>
+            <script>
+                document.getElementById('succ_msg').innerHTML = '{{succ_msg}}'
+                setTimeout(() => {
+                    document.getElementById('succ_msg').setAttribute('style', 'display:none')
+                }, 2000)
+
+            </script>
+
+            {% endif %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <form action="{% url 'club_management:add_player' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <table style="margin-left: 180px; border-spacing: 10px;border-collapse: separate;">
+                    <tr>
+                        <td>
+                            Player Name
+                        </td>
+                        <td>
+                            <input type="text" required name="p_name" id="" class="form-control">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Address
+                        </td>
+                        <td>
+                            <textarea name="p_addr" required id="" cols="30" rows="10" class="form-control"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            D.O.B
+                        </td>
+                        <td>
+                            <input type="date" name="p_dob" class="form-control" id="">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Player Position
+                        </td>
+                        <td>
+                            <select name="position" class="form-control">
+                                {% for position in positions %}
+                                <option value="{{position|lower}}">{{position|title}}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Email
+                        </td>
+                        <td>
+                            <input type="text" name="p_email" required class="form-control" id="p_email">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Phone No
+                        </td>
+                        <td>
+                            <input type="text" name="p_phno" required class="form-control" id="p_phno">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Height
+                        </td>
+                        <td>
+                            <input type="number" min=100 name="p_height" required class="form-control" id="">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Weight
+                        </td>
+                        <td>
+                            <input type="number" min=0 name="p_weight" required class="form-control" id="">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Pic
+                        </td>
+                        <td>
+                            <input type="file" name="p_img" required class="form-control" id="">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><input type="submit" value="ADD" class="btn btn-primary" onclick="return validate()"></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+<script>
+    function validate() {
+        ph = document.getElementById('p_phno').value
+        phno_pattern = /^[6-9]{1}[0-9]{9}$/;
+        mail = document.getElementById('p_email').value
+        var mail_pattern = /^[A-Z0-9._%+-]+@([A-Z0-9-]+\.)+[A-Z]{2,4}$/i;
+        
+        if (mail_pattern.test(mail) == false) {
+            alert('Please enter valid email.')
+            return false;
+        }
+
+        if (phno_pattern.test(ph) == false) {
+            alert('Please enter valid phone no.')
+            return false
+        }
+
+        $.ajaxSetup({
+            headers: {
+                "X-CSRFToken": '{{csrf_token}}'
+            }
+        })
+        // $.ajax({
+        //     url: '/SCMS/Team/AddPlayer',
+        //     type: 'POST',
+        //     data: {
+        //         dt: date,
+        //         n: name,
+        //         amt: amount
+        //     },
+        //     success: function (response) {
+        //         document.getElementById('err_msg').setAttribute('style','display:block')
+        //         document.getElementById('err_msg').innerHTML = response.msg
+        //         if (response.status == true) {
+        //             setTimeout(() => {
+        //                 msg.setAttribute('style', 'display:none')
+        //             }, 1800)
+
+
+        //         }
+
+        //         else {
+        //             document.getElementById('us_msg').setAttribute('style','display:block')
+        //             document.getElementById('succ_msg').innerHTML = response.msg
+        //             if (response.status == true) {
+        //                 setTimeout(() => {
+        //                     msg.setAttribute('style', 'display:none')
+        //                 }, 1800)
+        //             }
+
+
+
+
+        //         }
+        //     });
+
+
+    }
+    function submit() {
+
+    }
+</script>
 {% endblock %}
-
-

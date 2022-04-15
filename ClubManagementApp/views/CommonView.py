@@ -63,6 +63,7 @@ def Login(request):
                     if auth_passwd:
                         if auth_data.team_status=='approved':
                             request.session['team_id']=auth_data.team_id
+                            request.session['team_name']=auth_data.team_name
                             request.session['team_type']=auth_data.team_type.sport_id
                             return redirect("club_management:team_home")
                         else:
@@ -132,41 +133,39 @@ def TeamReg(request):
     form=TeamRegForm()
     sport_types=SportsDetail.objects.all()
     if request.method=='POST':
-        form=TeamRegForm(request.POST,request.FILES)
-        if form.is_valid():
-            team_name=form.cleaned_data['team_name'].lower()
-            team_place=form.cleaned_data['team_place'].lower()
-            team_phno=form.cleaned_data['team_phno']
-            team_logo=form.cleaned_data['team_logo']
-            team_email=form.cleaned_data['team_email']
-            id=request.POST['team_type']
-            team_type=SportsDetail.objects.get(sport_id=id)
-            team_status="not approved"
-            team_user_id=GetTeamID()
-            passwd=get_random_string(length=8)
-            team_passwd=pbkdf2_sha256.hash(passwd,rounds=1000,salt_size=32)
-            do_exist=TeamDetails.objects.filter(team_name=team_name,team_place=team_place,team_type=id).exists()
+      
+        team_name=request.POST['t_name'].lower()
+        team_place=request.POST['t_place'].lower()
+        team_phno=request.POST['t_phno']
+        team_logo=request.FILES['t_logo']
+        team_email=request.POST['t_email']
+        id=request.POST['team_type']
+        team_type=SportsDetail.objects.get(sport_id=id)
+        team_status="not approved"
+        team_user_id=GetTeamID()
+        passwd=get_random_string(length=8)
+        team_passwd=pbkdf2_sha256.hash(passwd,rounds=1000,salt_size=32)
+        do_exist=TeamDetails.objects.filter(team_name=team_name,team_place=team_place,team_type=id).exists()
 
-            if do_exist:
-                msg="Team Name Already Taken"
-                return render(request,'Common/TeamRegistration.html',{'form':form,'types':sport_types,'msg':msg})
-            else:
-                email_exist=TeamDetails.objects.filter(team_email=team_email).exists()
-                if not email_exist:
-                    qry=TeamDetails(team_name=team_name,team_place=team_place,team_email=team_email,team_type=team_type,team_phno=team_phno,team_logo=team_logo,team_status=team_status,team_user_id=team_user_id, team_passwd =team_passwd)
-                    
-                    qry.save()
-                    # email_team(team_email,str(team_user_id),passwd)
-                    print("password and user id is",str(team_user_id),passwd)
-                    
-                    msg="Team Registered Succesfully"
-                    form=TeamRegForm()
-                    return render(request,'Common/TeamRegistration.html',{'form':form,'types':sport_types,'msg':msg})
-                else:
-                    msg="Email Already Exist"
-                    return render(request,'Common/TeamRegistration.html',{'form':form,'types':sport_types,'msg':msg})
+        if do_exist:
+            err_msg="Team Name Already Taken"
+            return render(request,'Common/TeamRegistration.html',{'form':form,'types':sport_types,'err_msg':err_msg})
         else:
-            print(form.errors)
+            email_exist=TeamDetails.objects.filter(team_email=team_email).exists()
+            if not email_exist:
+                qry=TeamDetails(team_name=team_name,team_place=team_place,team_email=team_email,team_type=team_type,team_phno=team_phno,team_logo=team_logo,team_status=team_status,team_user_id=team_user_id, team_passwd =team_passwd)
+                
+                qry.save()
+                # email_team(team_email,str(team_user_id),passwd)
+                print("password and user id is",str(team_user_id),passwd)
+                
+                succ_msg="Team Registered Succesfully"
+                 
+                return render(request,'Common/TeamRegistration.html',{'form':form,'types':sport_types,'succ_msg':succ_msg})
+            else:
+                err_msg="Email Already Exist"
+                return render(request,'Common/TeamRegistration.html',{'form':form,'types':sport_types,'err_msg':err_msg})
+         
     return render(request,'Common/TeamRegistration.html',{'form':form,'types':sport_types})
 
 def VenueReg(request):

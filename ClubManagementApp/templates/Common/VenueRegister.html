@@ -3,6 +3,15 @@
 <form action="{% url 'club_management:venue_reg' %}" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     <p style="margin-left: 90px; font-weight: bolder;color:red; font-size: large;">Register Venue Now!</p>
+   
+    {% if is_err %}
+        <div class="alert alert-danger" style="visibility: visible; width: 400px;margin-top:20px">{{err_msg}}
+        </div>
+        {% endif %}
+        {% if is_success %}
+        <div class="alert alert-success" style="visibility: visible; width: 400px;margin-top:20px">{{msg}}</div>
+        {% endif %}
+
     <table  style="border-collapse: separate; border-spacing: 15px;">
         <tr>
            <td> {{form.venue_name.label}}</td>

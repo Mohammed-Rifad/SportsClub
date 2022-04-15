@@ -1,9 +1,12 @@
 {% extends 'TeamAdmin/TeamAdminMaster.html' %}
 
 {% block content%}
-    <h3 class="text-danger">Player Details</h3>
-    <img src="{{player.player_img.url}}" class="mg img-circle " style="height: 150px; width: 150px;">
-<table class="player-details  table table-striped">
+    <h2 class="text-primary" style="margin-top: 40px; margin-left: 390px;">Player Details</h2>
+    
+    <div class="container">
+    <img src="{{player.player_img.url}}" class="mg img-circle " style="height: 150px; width: 150px;border-radius: 20px;margin-bottom: 20px;">
+    <h2 style="display: inline; margin-left: 230px;">{{player.player_name|title}}</h2>
+<table class="player-details  table table-striped" style="margin-bottom: 30px;">
     <!-- <tr>
         
         <td></td>
@@ -47,7 +50,7 @@
 
 </table>
 
-
+</div>
 {% endblock %}
 
 

@@ -1,28 +1,38 @@
 {% extends 'Common/CommonMaster.html' %}
 {% block content %}
 <form action="{% url 'club_management:team_reg' %}" method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    <p style="margin-left: 90px; font-weight: bolder;color:red; font-size: large;">Register Your Team Now!</p>
-    <table  style="border-collapse: separate; border-spacing: 15px;">
-        <tr>
-           <td> {{form.team_name.label}}</td>
-           <td> {{form.team_name}}</td>
+   {% csrf_token %}
+   {% if err_msg %}
+   <div class="alert alert-danger" style="visibility: visible; width: 400px;margin-top:20px; height :50px">{{err_msg}}
+   </div>
+   {% endif %}
+   {% if succ_msg %}
+   <div class="alert alert-success" style="visibility: visible; width: 400px;margin-top:20px;height: 50px;">{{succ_msg}}</div>
+   {% endif %}
+   <p style="margin-left: 90px; font-weight: bolder;color:red; font-size: large;">Register Your Team Now!</p>
+  
+
+   <table style="border-collapse: separate; border-spacing: 15px;">
+      
+      <tr>
+           <td>Team Name</td>
+           <td> <input type="text" required name="t_name" id="t_name" class="form-control"></td>
         </tr>
-        <tr>
-            <td> {{form.team_place.label}}</td>
-            <td> {{form.team_place}}</td>
+        <tr> 
+        <td>Place</td>
+            <td><input type="text" required name="t_place" id="t_place" class="form-control"></td>
          </tr>
+          
+            <td>Email</td>
+            <td><input type="text" required name="t_email" id="t_email" class="form-control"></td>
+         </tr> 
          <tr>
-            <td> {{form.team_phno.label}}</td>
-            <td> {{form.team_phno}}</td>
-         </tr>
-         <tr>
-            <td> {{form.team_email.label}}</td>
-            <td> {{form.team_email}}</td>
-         </tr>
-         <tr>
-            <td> {{form.team_place.label}}</td>
-            <td> {{form.team_logo}}</td>
+            <td>Phone No</td>
+            <td><input type="text" required name="t_phno" id="t_phno" class="form-control"></td>
+         </tr> 
+       <tr>
+            <td>Upload Logo</td>
+            <td> <input type="file" required name="t_logo" id="" class="form-control"></td>
          </tr>
          <tr>
              <td>Team Type</td>
@@ -31,10 +41,32 @@
                 <option value={{type.sport_id}}>{{type.sport_name|capfirst}} -- {{type.sport_type|capfirst}}</option>
                 {% endfor %}
             </select></td>
-         </tr>
-         <tr><td></td><td><input type="submit" class="btn btn-primary" value="Register"/> {{msg}}</td></tr>
-    </table>
-    
-      
+         </tr>  
+      <tr>
+         <td></td>
+         <td><input type="submit" class="btn btn-primary" value="Register" onclick="return validate()" /> {{msg}}</td>
+      </tr>
+   </table>
+
+
 </form>
+
+<script>
+   function validate() {
+      ph = document.getElementById('t_phno').value
+      phno_pattern = /^[6-9]{1}[0-9]{9}$/;
+      mail = document.getElementById('t_email').value
+      var mail_pattern = /^[A-Z0-9._%+-]+@([A-Z0-9-]+\.)+[A-Z]{2,4}$/i;
+      alert(mail_pattern.test(mail))
+      if (mail_pattern.test(mail) == false) {
+         alert('Please enter valid email.')
+         return false;
+      }
+
+      if (phno_pattern.test(ph) == false) {
+         alert('Please enter valid phone no.')
+         return false
+      }
+   }
+</script>
 {% endblock %}

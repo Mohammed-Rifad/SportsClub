@@ -2,34 +2,39 @@
 {% load humanize %}
 {% block content%}
     <div class="container" style="min-height: 300px;">
-<table class="table table-hover">
-    <tr>
-        <th>Title</th>
-        <th>Starting Date</th>
-        <th>End Date</th>
-        <th>Reg Date</th>
-        <th>Max.Players</th>
-        <th>Ground Fee</th>
-        <th>Prize Money</th>
-        <th></th>
-        <th></th>
-    </tr>
-<tr>
-    {% for t in tournaments %}
-    <td style="max-width: 100px;overflow: hidden;">{{t.tournament_title|capfirst}}</td>
-    <td id="s_date">{{t.start_date}}</td>
-    <td >{{t.end_date}}</td>
-    <td>{{t.reg_date}}</td>
-    <td>{{t.players_allowed}}</td>
-    <td>Rs {{t.reg_fee|intcomma}}</td>
-    <td>Rs {{t.win_prize|intcomma}}</td>
-    <td><a href="{% url 'club_management:t_players' t.tournament_id %}" name="reg" id="p">Register</a></td>
-  <!-- <td><a href="{% url 'club_management:t_players' t.tournament_id %}" id="p">Add Players</a></td> -->
-    <td><input type="hidden" name="t_id" value="{{t.tournament_id}}" id=""></td>
-</tr>
+        <div class="row">
+            <div class="col-md-12">
+    <h2 class="text-primary" style="margin-top: 26px; margin-left: 390px;">Recent Tournaments</h2>
 
-{% endfor %}
-</table>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-hover" style="margin-top: 20px;">
+                    <tr>
+                        <th>Title</th>
+                      <th>Starting Date</th>
+                       <th></th>  
+                        <th></th>
+                    </tr>
+                <tr>
+                    {% for t in tournaments %}
+                    <td style="max-width: 100px;overflow: hidden;">{{t.tournament_title|capfirst}}</td>
+                     <td id="s_date">{{t.start_date}}</td>
+                  
+                    <td><a href="{% url 'club_management:ta_tdetail' t.tournament_id %}" class="btn btn-primary" name="reg" id="p">View Details</a></td>
+                  
+                     <td><input type="hidden" value="{{t.tournament_id}}" name="t_id" id=""></td>
+                </tr>
+                
+                {% endfor %}
+                </table>
+
+               
+            </div>
+        </div>
+
 </div>
 
 

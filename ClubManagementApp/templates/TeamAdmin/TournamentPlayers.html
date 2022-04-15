@@ -2,80 +2,132 @@
 
 {% block content%}
 
-   
-        <div class="row">
-            {% if team_resgistered %}
-            <div class="h3 text-danger col-md-12">Add Players For &nbsp;{{tournament.tournament_title|title}}
+<div class="container">
+<div class="row">
+
+    <div class="col-md-12" style="margin-top: 30px;margin-left: 220px;">
+        <div class="h2 text-primary col-md-12">
+            <div class='col-md-12'>
+                Add Players For &nbsp;{{tournament.tournament_title|title}}
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="row">
+
+    <div class="col-md-12" style="margin-top: 30px;margin-left: 220px;">
+        <div class="h2 text-primary col-md-12">
+            <div class='col-md-7'>
 
             </div>
-            <div class="col-md-7">
-                <form action="" method="POST" enctype="multipart/form-data">
-                    {% csrf_token %}
+            <div class='col-md-5 h4'>
+                Registration Status :
+                
+                {% if reg.team_status == 'not approved' %}
+                <span style="color: red;">{{reg.team_status|title}}</span>
 
-                    
+                {% else %}
+                <span style="color: green;">{{reg.team_status|title}}</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="row" >
+    
+        <div class="col-md-7" >
+            <form action="" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+
                 <table style="border-spacing: 10px;border-collapse: separate;margin-left: 200px; margin-top: 50px;">
                     <tr>
                         <td>Player: </td>
                         <td><select name="p" id="" class="form-control">
-                            {% for p in cur_players %}
-                            <option value="{{p.player_id}}">{{p.player_name|title}}</option>
-                            {% endfor %}
-                        </select></td>
+                                {% for p in cur_players %}
+                                <option value="{{p.player_id}}">{{p.player_name|title}}</option>
+                                {% endfor %}
+                            </select></td>
                     </tr>
                     <tr>
                         <td>Upload File</td>
-                        <td><input type="file" name="p_file" id="" required></td>
+                        <td><input type="file" name="p_file" id="" class='form-control' required></td>
                     </tr>
                     <tr>
                         <td></td>
-                        <td><input type="submit" class="btn btn-primary" value="Add" name="" id="" style="background-color: blue;"></td>
+                        <td><input type="submit" class="btn btn-primary" value="Add" name="" id=""
+                                style="background-color: blue;"></td>
                     </tr>
                 </table>
-                {{msg}}
             </form>
-            </div>
-            <div class="col-md-3">
-               <h3 class="mt-3">Added Players</h3> 
-               <table class="table table-hover">
-                   <tr align="center">
-                       <td> <b>Player Name</b>   </td>
-                       <td><b>Status</b></td>
-                       
-                   </tr>
-                   {% for p in added_players %}
-                   <form action="" method="POST" >
-                    {% csrf_token %}
-                   <tr align="center" style="font-size: medium;">
-                        <td style="height: 20px; vertical-align: middle;">{{p.player_id.player_name|title}}</td>
-                        <td style="height: 20px; vertical-align: middle;">{{p.player_status|title}}</td>
-                        <td><input type="submit" name="del" class=" btn-danger" value="Delete" style="height: 30px; vertical-align: middle; border-radius: 5px; " id=""></td>
-                        <td><input type="hidden" name="tid" value="{{p.tournament_id.tournament_id}}" id=""></td>
-                        <td><input type="hidden" name="pid" value="{{p.player_id.player_id}}" id=""></td>
-                    </tr>
-                 
-                   {% endfor %}
-
-               </table>
-               {% else %}
-               <div class="col-md-12" style="min-height: 100px;">
-                   <p class="text-danger" style="margin-top: 10px;margin-left: 400px;">Please Register First</p>
-               </div>
-               {% endif %}
-            </div>
-            <div class="col-md-2">
-                {% if approved %}
-                <input type="submit" disabled id="" value="Pay Now"   class="btn btn-primary">
-                {% else %} 
-                <input type="submit" name="checkout" id="" value="Pay Now"   class="btn btn-primary">
-
+                {% if err_msg %}
+                <div class="alert alert-danger" id="err_msg" style=" width: 320px;margin-top:20px; height :50px;margin-left: 220px;">
+                    <script>
+                        document.getElementById('err_msg').innerHTML = '{{err_msg}}'
+                        setTimeout(() => {
+                            document.getElementById('err_msg').setAttribute('style', 'display:none')
+                        }, 2000)
+    
+                    </script>
+    
+                </div>
                 {% endif %}
-            </div>
-        </form>
-      
+                {% if succ_msg %}
+                <div class="alert alert-success" id="succ_msg" style=" width: 320px;margin-top:20px;height: 50px;margin-left: 220px;">
+                    {{succ_msg}}</div>
+                <script>
+                    document.getElementById('succ_msg').innerHTML = '{{succ_msg}}'
+                    setTimeout(() => {
+                        document.getElementById('succ_msg').setAttribute('style', 'display:none')
+                    }, 2000)
+    
+                </script>
+    
+                {% endif %}
+            </form>
+        </div>
+
+        <div class="col-md-5"  >
+            
+                <h3 class="mt-3" style="margin-left: 220px; margin-bottom: 20px;">Added Players</h3>
+                <table class="table table-hover">
+                    <tr align="center">
+                        <td> <b>Player Name</b> </td>
+                        <td><b>Status</b></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    {% for p in added_players %}
+                    <form action="" method="POST">
+                        {% csrf_token %}
+                        <tr align="center" style="font-size: medium;">
+                            <td style="height: 20px; vertical-align: middle;">{{p.player_id.player_name|title}}</td>
+                            <td style="height: 20px; vertical-align: middle;">{{p.player_status|title}}</td>
+                            <td><input type="submit" name="del" class="btn btn-danger" value="Delete"
+                                    id=""></td>
+                            <td><input type="hidden" name="tid" value="{{p.tournament_id.tournament_id}}" id=""></td>
+                            <td><input type="hidden" name="pid" value="{{p.player_id.player_id}}" id=""></td>
+                        </tr>
+    </form>
+                        {% endfor %}
+    
+                </table>
+            
+       
+    </div>
+</div>
 
 
+
+
+
+
+</div>
 
 
 {% endblock %}
-
-

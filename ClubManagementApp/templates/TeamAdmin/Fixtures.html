@@ -1,0 +1,39 @@
+{% extends 'TeamAdmin/TeamAdminMaster.html' %}
+{% load humanize %}
+{% block content%}
+    <div class="container" style="min-height: 300px;">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2 class="text-danger">Tournament Name</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 ">
+                  
+                    <table class="table table-hover" style="margin-top: 20px;">
+
+                        <tr align="center">
+                            <th>Match</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Team</th>
+                            <th>Venue</th>
+
+                        </tr>
+                        <tr align="center" >
+                            <td>1</td>
+                            <td>22/04/2022</td>
+                            <td>07:00pm</td>
+                            <td>CSK vs SRH</td>
+                            <td>Chennai</td>
+                            <td><a href="">Match Status/Watch Live</a></td>
+                        </tr>
+
+                    </table>
+                </div>
+            </div>
+
+    </div>
+{% endblock %}
+
+

@@ -2,30 +2,68 @@
 
 {% block page_content %}
 
-<table class="table table-striped">
-<tr>
-    <th></th>
-    <th>Player Name</th>
-    <th>D.O.B</th>
-    <th>Status</th>
-    <th>file</th>
-    <th>Approve/Reject</th>
-</tr>
-{% for player in players_list %}
-<form action="{% url 'club_management:a_updpl' %}" method="POST">
-    {% csrf_token %}
-<tr align="center">
-    <td><img src="{{player.player_id.player_img.url}}" class="img img-rounded"> </td>
-    <td>{{player.player_id.player_name|title}}</td>
-    <td>{{player.player_id.player_dob}}</td>
-    <td>{{player.player_status}}</td>
-    <td><a href="{{player.cert.url}}" target="_blank">view</a></td>
-    <td><button style="background-color: none; border: none;text-decoration: underline;color: blue;" name="approve">Approve</a></td>
-        <td><button style="background-color: none; border: none;text-decoration: underline;color: blue;" name="reject">Reject</a></td>
-            <td><input type="hidden" name="pl" value="{{player.player_id.player_id}}" id=""></td>
-        </tr>
-</form>
-{% endfor %}
-</table>
+<div class="container">
+    <div class="row" style="margin-top: 20px;">
+        <div class="col-md-4">
+
+        </div>
+        <div class="col-md-7">
+<h3 class="text-primary" style="margin-top: 30px;margin-bottom: 0px;">Players List</h3>
+        </div>
+
+    </div>
+    <div class="row" style="margin-top: 20px;">
+        <div class="col-md-2">
+
+        </div>
+        <div class="col-md-8">
+
+        </div>
+        <div class="col-md-2">
+            {% if hide_btn == True %}
+            <form action="" method="POST">
+                {% csrf_token %}
+            <input type="submit" value="Approve Team" onclick="showAlert()" class="btn btn-primary" name="" id="btn">
+            <script>
+                 function showAlert(){
+                     alert('Approved Succesfully')
+                 }
+            </script>
+        </form>
+            {% endif %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12" style="margin-top: 30px;">
+            <table class="table table-striped">
+                <tr>
+                    <th></th>
+                    <th>Player Name</th>
+                    <th>D.O.B</th>
+                    <th>Status</th>
+                    <th>file</th>
+                    <th>Approve/Reject</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                {% for player in players_list %}
+                <form action="{% url 'club_management:a_updpl' %}" method="POST">
+                    {% csrf_token %}
+                    <tr align="center">
+                        <td><img src="{{player.player_id.player_img.url}}" height="200px"> </td>
+                        <td>{{player.player_id.player_name|title}}</td>
+                        <td>{{player.player_id.player_dob}}</td>
+                        <td>{{player.player_status}}</td>
+                        <td><a href="{{player.cert.url}}" class="btn btn-success" target="_blank">Download file</a></td>
+                        <td><button class="btn btn-primary" name="approve">Approve</a></td>
+                        <td><button class="btn btn-danger" name="reject">Reject</a></td>
+                        <td><input type="hidden" name="pl" value="{{player.player_id.player_id}}" id=""></td>
+                    </tr>
+                </form>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

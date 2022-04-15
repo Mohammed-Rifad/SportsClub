@@ -1,0 +1,38 @@
+{% extends 'Admin/AdminMaster.html' %}
+
+{% block page_content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+
+        </div>
+        <h3 class="text-primary" style="margin-top: 30px;margin-bottom: 0px;">Generate Fixture</h3>
+        <div class="col-md-8"></div>
+    </div>
+    <div class="row" style="margin-top: 60px;">
+        <div class="col-md-2" style="margin-top: 60px;">
+            
+        </div>
+        <div class="col-md-8">
+            <form action="" method="POST">
+                {% csrf_token %}
+            <table style="border-spacing: 20px;border-collapse: separate;">
+                <tr>
+                    <td class="text-dark h4">Select Tournament</td>
+                   <td><select class="form-control" name="tr" id="" style="min-width: 100px;">
+                       {% for t in tr_data %}
+                    <option value="{{t.tournament_id}}">{{t.tournament_title|title}}</option>
+                    {% endfor %}
+                </select></td>
+
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><input type="submit" value="Generate" class="btn btn-primary" name="" id=""></td>
+                </tr>
+            </table>
+        </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
