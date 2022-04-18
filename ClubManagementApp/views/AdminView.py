@@ -1,10 +1,13 @@
+from re import T
 from time import strftime
-from ClubManagementApp.services import account_status
+
+from django.http import JsonResponse
+from ClubManagementApp.services import FixtureGenerate, account_status
 from django.http.response import HttpResponse
 from django.shortcuts import render,redirect
 from django.db.models import Q
-from datetime import date, datetime
-from ..models import AdminNotification,SportsDetail, TeamDetails, VenueDetails,TournamentDetails
+from datetime import date, datetime, timedelta
+from ..models import AdminNotification,SportsDetail, TeamDetails, VenueDetails,TournamentDetails,Fixture
 from ClubManagementApp.Forms.AdminForm import *
 
 def AdminHome(request):
@@ -54,7 +57,7 @@ def  ApproveTeam(request,id):
     team_data=TeamDetails.objects.get(team_id=id)
     team_data.team_status="approved"
     team_data.save()
-    account_status(team_data.team_email,"Approved")
+    # account_status(team_data.team_email,"Approved")
     return redirect("club_management:team_request") 
 
 def  RejectTeam(request,id):
@@ -241,4 +244,156 @@ def UpdatePlayerStatus(request):
 
 def GenerateFixture(request):
     tr_data=TournamentDetails.objects.filter(tournament_status='not completed')
-    return render(request,'Admin/GenerateFixture.html',{'tr_data':tr_data,})
+    dt_dict={}
+    dt_arr=[]
+    fixture_data=""
+    if request.method=='POST':
+
+        if 'upd' in request.POST:
+            id=request.POST['tr']
+            return redirect('/SCMS/AdminHome/Fixture/'+id)
+        else:
+
+            tr=TournamentRegistration.objects.filter(tournament_id=request.POST['tr'])
+            dt=TournamentDetails.objects.get(tournament_id=request.POST['tr'])
+            
+            dt_start=datetime.strptime(dt.start_date,'%d/%m/%Y')
+            dt_end=datetime.strptime(dt.end_date,'%d/%m/%Y')
+
+            diff=dt_end-dt_start
+            
+            for x in range(0,diff.days+1):
+                print(dt_start+timedelta(days=x),'  ',dt_end)
+                # d=str(dt_start.day)+'/'+str(dt_start.month)+'/'+str(dt_start.year)
+                st=dt_start+timedelta(days=x)
+                dt_dict['date']=str(st.day)+'/'+str(st.month)+'/'+str(st.year)
+                dt_arr.append(dt_dict)
+                dt_dict={}
+            print(dt_arr)
+            fxt=FixtureGenerate(tr,tr.count())
+            
+            fixture_generated=Fixture.objects.filter(tournament_id=request.POST['tr']).exists()
+
+            if not fixture_generated:
+                for i in fxt:
+                    
+                    fixture=Fixture(tournament_id=dt,team1=i['t1'],team2=i['t2'],match=i['match'])
+                    fixture.save()
+
+                # print(i['t1'])
+
+            fixture_data=Fixture.objects.filter(tournament_id=request.POST['tr'])
+                
+            
+
+            
+    return render(request,'Admin/GenerateFixture.html',{'tr_data':tr_data,'fixture':fixture_data,'date':dt_arr})
+
+def UpdateFixture(request,id):
+
+    dt_arr=[]
+    dt_dict={}
+    fixtures=Fixture.objects.filter(tournament_id=id)    
+    dt=TournamentDetails.objects.get(tournament_id=id)
+    dt_start=datetime.strptime(dt.start_date,'%d/%m/%Y')
+    dt_end=datetime.strptime(dt.end_date,'%d/%m/%Y')
+
+    diff=dt_end-dt_start
+    
+    for x in range(0,diff.days+1):
+        print(dt_start+timedelta(days=x),'  ',dt_end)
+        # d=str(dt_start.day)+'/'+str(dt_start.month)+'/'+str(dt_start.year)
+        st=dt_start+timedelta(days=x)
+        dt_dict['date']=str(st.day)+'/'+str(st.month)+'/'+str(st.year)
+        dt_arr.append(dt_dict)
+        dt_dict={}
+
+    if request.method=='POST':
+        date=request.POST['dt']
+        match=request.POST['match']
+        t1=request.POST['t1']
+        t2=request.POST['t2']
+        f=request.POST['am/pm']
+        if int(t1)<1:
+            t1='0'+t1
+        if int(t2)<10:
+            t2='0'+t2
+        time=t1+':'+t2 +' '+f
+        print(time)
+        fxt=Fixture.objects.get(id=match)
+        fxt.date=date
+        fxt.time=time
+        fxt.save()
+    return render(request,'Admin/UpdateFixture.html',{'fixtures':fixtures,'tr':dt,'date':dt_arr})
+    
+def UploadLive(request):
+    tournaments=TournamentDetails.objects.filter(tournament_status='not completed')
+
+    if request.method=='POST':
+       
+        fx=Fixture.objects.get(id=request.POST['fx'])
+        fx.match_video=request.FILES['file']
+        fx.save()
+        succ_msg='Video Uploaded Succesfully'
+        return render(request,'Admin/UploadLive.html',{'tournaments':tournaments,'succ_msg':succ_msg,})
+    return render(request,'Admin/UploadLive.html',{'tournaments':tournaments,})
+
+def LoadTournaments(request):
+    id=request.POST['id']
+    tr=Fixture.objects.filter(tournament_id=id)
+     
+    
+    return render(request,'Admin/Matches.html',{'tr':tr,})
+
+def MatchStatus(request):
+    tournaments=TournamentDetails.objects.filter(tournament_status='not completed')
+    
+    if request.method=='POST':
+        fx=request.POST['fx']
+        score1=request.POST['t_score1']
+        score2=request.POST['t_score2']
+        res=request.POST['result'].lower()
+        wonby=request.POST['wonby']
+        
+        tr_reg=TournamentRegistration.objects.get(tournament_id=request.POST['tr'],team_id=wonby)
+        tr_reg.team_point+=1
+        tr_reg.save()
+        fixture=Fixture.objects.get(id=fx)
+
+        fixture.team1_score=score1
+        fixture.team2_score=score2
+        fixture.result=res
+
+        fixture.save()
+        succ_msg="Updated Succesfully"
+        return render(request,'Admin/MatchStatus.html' ,{'tournaments':tournaments,'succ_msg':succ_msg,})
+
+    return render(request,'Admin/MatchStatus.html' ,{'tournaments':tournaments,})
+
+
+def TournamentStatus(request):
+     
+    tournaments=TournamentDetails.objects.filter(tournament_status='not completed')
+    if request.method=='POST':
+        tr=request.POST['tr']
+         
+        matches=Fixture.objects.filter(tournament_id=tr)
+
+         
+
+        return render(request,'Admin/TournamentStatus.html' ,{'tournaments':tournaments,'matches':matches,})
+    return render(request,'Admin/TournamentStatus.html' ,{'tournaments':tournaments,})
+
+def UpdateTrStatus(request):
+
+    tr=request.POST['tr_id']
+    tournament=TournamentDetails.objects.get(tournament_id=tr)
+    tournament.tournament_status='completed'
+    tournament.save()
+
+    return redirect('club_management:admin_home')
+
+def LoadTeam(request):
+    fx=Fixture.objects.get(id=request.POST['id'])
+     
+    return render(request,'Admin/LoadTeam.html',{'t':fx,})

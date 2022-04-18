@@ -114,7 +114,7 @@ class TournamentDetails(models.Model):
     reg_date=models.CharField(max_length=20,db_column="reg_date")
     reg_fee=models.FloatField(db_column="reg_fee")
     win_prize=models.FloatField(db_column="win_prize")
-    # venue_approval=models.CharField(max_length=20,db_column="v_approval")
+    winner=models.ForeignKey(TeamDetails,on_delete=models.CASCADE,null=True)
     tournament_status=models.CharField(max_length=20,db_column="t_status")
     
     class Meta:
@@ -141,3 +141,18 @@ class TournamentPlayers(models.Model):
     
     class Meta:
         db_table="tb_tournamentPlayers"
+
+
+class Fixture(models.Model):
+    tournament_id=models.ForeignKey(TournamentDetails,on_delete=models.CASCADE)
+    team1=models.ForeignKey(TeamDetails,on_delete=models.CASCADE,related_name='team1',null=True)
+    team2=models.ForeignKey(TeamDetails,on_delete=models.CASCADE,related_name='team2',null=True)
+    match=models.CharField(max_length=50)
+    date=models.CharField(max_length=20)
+    time=models.CharField(max_length=20)
+    team1_score=models.CharField(max_length=10)
+    team2_score=models.CharField(max_length=10)
+    result=models.CharField(max_length=30)  
+    match_video=models.FileField('video/',default="")
+    class Meta:
+        db_table="tb_fixture"

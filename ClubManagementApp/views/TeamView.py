@@ -1,15 +1,16 @@
 from datetime import date, datetime
 from faulthandler import disable
 from re import T
+from django.db.models import Q
 from time import strftime
 from ClubManagementApp.Forms.TeamForm import AddPlayerForm
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
-from ..models import PlayerDetails,SportsDetail, TeamDetails, TournamentDetails, TournamentPlayers, TournamentRegistration
+from ..models import PlayerDetails,SportsDetail, TeamDetails, TournamentDetails, TournamentPlayers, TournamentRegistration,Fixture
 from ..Forms import TeamForm
 from passlib.hash import pbkdf2_sha256
 from django.utils.crypto import get_random_string
-from ..services import email_player, email_team
+
 
 def TeamHome(request):
     players=PlayerDetails.objects.filter(team_id=request.session['team_id']).count()
@@ -134,7 +135,7 @@ def AddTournamentPlayers(request,id):
   
 
     tournament=TournamentDetails.objects.get(tournament_id=id)
-    regstn=TournamentRegistration.objects.get(tournament_id=id)
+    regstn=TournamentRegistration.objects.get(tournament_id=id,team_id=request.session['team_id'])
     current_players=PlayerDetails.objects.filter(team_id=request.session['team_id'])
     added_players=TournamentPlayers.objects.filter(team_id=request.session['team_id'])
     succ_msg=""
@@ -179,7 +180,7 @@ def AddTournamentPlayers(request,id):
                     data.save()   
                     succ_msg="Player Added Succesfully"
                     tournament=TournamentDetails.objects.get(tournament_id=id)
-                    regstn=TournamentRegistration.objects.get(tournament_id=id)
+                    regstn=TournamentRegistration.objects.get(tournament_id=id,team_id=request.session['team_id'])
                     current_players=PlayerDetails.objects.filter(team_id=request.session['team_id'])
                     added_players=TournamentPlayers.objects.filter(team_id=request.session['team_id'])
                      
@@ -242,14 +243,40 @@ def LiveMatch(request,tid):
 def MatchStatus(request,tid):
     return render(request,'TeamAdmin/MatchStatus.html')
 
-def PointsTable(request,tid):
-    return render(request,'TeamAdmin/PointTable.html')
+def PointsTable(request):
+    tournaments=TournamentDetails.objects.filter(tournament_status='not completed')
+    if request.method=='POST':
+        data=TournamentRegistration.objects.filter(tournament_id=request.POST['tr']).order_by('-team_point')
+        tr=TournamentDetails.objects.get(tournament_id=request.POST['tr'])
+        return render(request,'TeamAdmin/PointTable.html',{'tournaments':tournaments,'data':data,'tr':tr})
+    return render(request,'TeamAdmin/PointTable.html',{'tournaments':tournaments})
 
 def PreviousMatches(request):
-    return render(request,'TeamAdmin/PreviousMatches.html')
+    matches=Fixture.objects.filter(Q(team1=request.session['team_id'])|Q(team2=request.session['team_id']))
+    if request.method=='POST':
+        id=request.POST['id']
+        m=Fixture.objects.get(id=id)
+        return render(request,'TeamAdmin/PreviousVideo.html',{'m':m,})
+
+    return render(request,'TeamAdmin/PreviousMatches.html',{'matches':matches,})
 
 def Logout(request):
     del request.session['team_id']
     del request.session['team_type']
     request.session.flush()
     return redirect("club_management:home")
+
+
+def TournamentStatus(request):
+     
+    tournaments=TournamentDetails.objects.filter(tournament_status='not completed')
+    if request.method=='POST':
+        tr=request.POST['tr']
+         
+        matches=Fixture.objects.filter(tournament_id=tr)
+
+         
+
+        return render(request,'Admin/TournamentStatus.html' ,{'tournaments':tournaments,'matches':matches,})
+    return render(request,'TeamAdmin/TournamentStatus.html' ,{'tournaments':tournaments,})
+

@@ -1,0 +1,34 @@
+{% extends 'TeamAdmin/TeamAdminMaster.html' %}
+{% load humanize %}
+{% block content%}
+    <div class="container" style="min-height: 300px;">
+        
+            <div class="row">
+              
+                <div class="col-md-12" style="margin-top: 40px;">
+                    <h1 class="text-danger text-center">{{m.video}}</h1>
+                </div>
+            </div>
+            
+            <div class="row">
+           <div class="col-md-12">
+               {% if m.match_video %}
+            <video height="500px" controls>
+               
+               <source  src="{{m.match_video.url}}">
+               
+                
+                
+               </video>
+               {% else %}
+               <p>No Video Found</p>
+               {% endif %}
+            
+           </div>
+            </div>
+           
+
+    </div>
+{% endblock %}
+
+

@@ -1,0 +1,97 @@
+{% extends 'Admin/AdminMaster.html' %}
+
+{% block page_content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+
+        </div>
+        <h3 class="text-primary" style="margin-top: 30px;margin-bottom: 0px;">Upload Live</h3>
+        <div class="col-md-8"></div>
+    </div>
+    <div class="row" style="margin-top: 60px;">
+        <div class="col-md-2" style="margin-top: 60px;">
+
+        </div>
+        <div class="col-md-8">
+            <form action="" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <table style="border-spacing: 20px;border-collapse: separate;">
+                    <tr>
+                        <td class="text-dark h4">Select Tournament</td>
+                        <td><select class="form-control" required name="tr" id="tr" style="min-width: 150px;">
+                                <option value="" disabled selected>Select Tournament</option>
+                                {% for t in tournaments %}
+                                <option value="{{t.tournament_id}}">{{t.tournament_title|title}}</option>
+                                {% endfor %}
+                            </select></td>
+
+                    </tr>
+                    <tr>
+                        <td class="text-dark h4" >Select Match</td>
+                        <td><select class="form-control" required name="fx" id="fx" style="min-width: 150px;">
+                                 
+                            </select></td>
+
+                    </tr>
+                    <tr>
+                        <td class="text-dark h4">Upload Video</td>
+                        <td>
+                            <input type="file" name="file" id="" class="form-control" required>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><input type="submit" value="Upload" class="btn btn-primary" name="" id="">
+                        </td>
+
+                    </tr>
+                </table>
+                {% if succ_msg %}
+    <div class="alert alert-success" id="succ_msg" style=" width: 320px;margin-top:20px;height: 50px;">
+        {{succ_msg}}</div>
+    <script>
+        document.getElementById('succ_msg').innerHTML = '{{succ_msg}}'
+        setTimeout(() => {
+            document.getElementById('succ_msg').setAttribute('style', 'display:none')
+        }, 2000)
+
+    </script>
+
+    {% endif %}
+            </form>
+        </div>
+    </div>
+
+
+    
+</div>
+</div>
+
+<script>
+
+
+    $('#tr').change(function () {
+        $.ajaxSetup({
+            headers: {
+                "X-CSRFToken": '{{csrf_token}}'
+            }
+        })
+       
+        $.ajax({
+            url: '/SCMS/AdminHome/LoadT',
+            type: 'POST',
+            data: {
+                id: $(this).val(),
+
+            },
+            success: function (response) {
+                $('#fx').html(response)
+                console.log(response)
+            }
+
+        })
+    })
+</script>
+{% endblock %}

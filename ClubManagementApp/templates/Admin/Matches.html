@@ -1,0 +1,8 @@
+<option value="" disabled selected>Select Match</option>
+{% for m in tr %}
+
+<option value="{{m.id}}">{{m.match|upper}}</option>
+
+{% endfor %}
+
+

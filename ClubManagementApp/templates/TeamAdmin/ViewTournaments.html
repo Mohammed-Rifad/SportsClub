@@ -24,7 +24,7 @@
                      <td id="s_date">{{t.start_date}}</td>
                   
                     <td><a href="{% url 'club_management:ta_tdetail' t.tournament_id %}" class="btn btn-primary" name="reg" id="p">View Details</a></td>
-                  
+                  <td><a href="/SCMS/TeamAdmin/TournamentStatus" class="btn btn-warning">Tournament Status</a></td>
                      <td><input type="hidden" value="{{t.tournament_id}}" name="t_id" id=""></td>
                 </tr>
                 

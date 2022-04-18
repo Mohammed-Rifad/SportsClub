@@ -1,0 +1,128 @@
+{% extends 'Admin/AdminMaster.html' %}
+
+{% block page_content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+
+        </div>
+        <h3 class="text-primary" style="margin-top: 30px;margin-bottom: 0px;">Fixture For {{tr.tournament_title|title}}
+        </h3>
+        <div class="col-md-8"></div>
+    </div>
+    <div class="row" style="margin-top: 60px;">
+        <div class="col-md-2" style="margin-top: 60px;">
+
+        </div>
+        <div class="col-md-8">
+            <form action="" method="POST">
+                {% csrf_token %}
+                <table style="border-spacing: 20px;border-collapse: separate; width: 500px;">
+                    <tr>
+                        <td>Select Match</td>
+                        <td><select name="match" id="" class="form-control">
+                                {% for m in fixtures %}
+                                <option value="{{m.id}}">{{m.match|upper}}</option>
+                                {% endfor %}
+                            </select></td>
+                    </tr>
+                    <tr>
+                        <td class="text-dark h4"> Date</td>
+                        <td><select class="form-control" name="dt" id="" style="min-width: 170px;">
+                                {% for d in date %}
+                                <option value="{{d.date}}">{{d.date}}</option>
+                                {% endfor %}
+                            </select> </td>
+
+                    </tr>
+                    <tr>
+                        <td>Time</td>
+                        <td><input type="number" min="1" max="12" name="t1" id="" class="form-control" style="width: 70px;display: inline;" required> : &nbsp;
+                            <input type="number" min="0" max="59" name="t2" id="" class="form-control" style="width: 70px;display: inline;" required>&nbsp;
+                            <select name="am/pm" id="" class="form-control" style="width: 70px;display: inline;" >
+                            <option value="am">AM</option>
+                            <option value="pm">PM</option></select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><input type="submit" value="Update" class="btn btn-primary" name="" id="">
+
+
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-12" style="margin-bottom: 40px;">
+            <table class="table table-hover">
+                <tr>
+                    <th>Sl.No</th>
+                    <th>Match</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                </tr>
+                {% for match in fixtures %}
+
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{match.match|upper}}</td>
+                    {% if match.date == '' %}
+
+
+                    <td>Not Assigned</td>
+
+                    {% else %}
+                    <td>{{match.date}}</td>
+
+                    {% endif %}
+
+
+                    <!----->
+                    {% if match.time == '' %}
+
+
+                    <td>Not Assigned</td>
+
+                    {% else %}
+                    <td>{{match.time}}</td>
+
+                    {% endif %}
+
+                    <!-- <td><input type="text" name="id" value="{{match.id}}" id=""></td> -->
+                </tr>
+
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+
+
+        $('#btn-date').click(function(){
+            $.ajaxSetup({
+        headers: {
+          "X-CSRFToken": '{{csrf_token}}'
+        }})
+        alert($('#dt').val())
+            $.ajax({
+        url: '/SCMS/AdminHome/Fixture',
+        type: 'POST',
+        data: {
+          dt: $('#dt').val(),
+          id:$('#id').val(),
+          updated:true
+        },
+        success:function(response){
+            console.log('updated')
+        }
+
+    })
+        })
+</script>
+{% endblock %}

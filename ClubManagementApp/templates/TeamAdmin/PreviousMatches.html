@@ -5,75 +5,54 @@
 
 
 <div class="container" style="min-height: 300px;">
-    <div class="row" style="margin-top: 10px;">
-        <div class="col-md-12" style="border: 1px solid red;background-color: cyan;" >
-            <p style="margin-top: 20px; margin-left: 280px;color: red;font-weight: 500; font-size: large;">Tournament name (12/10/2022)</p>
+    {% for m in matches %}
+    <form action="" method="POST">
+        {% csrf_token %}
+    <div class="row" style="margin-top: 10px;" >
+
+        <div class="col-md-12" style="border: 1px solid red;background-color: cyan;" style="margin-top: 70px;">
+            <p style="margin-top: 20px; margin-left: 280px;color: red;font-weight: 500; font-size: large;">{{m.tournament_id.tournament_title|title}} ({{m.tournament_id.start_date}})</p>
             <table style="border-spacing: 10px; border-collapse: separate;min-height:   100px;width:800px; margin-left: 150px;"  >
+               
                 <tr>
-                    <td> <img src="../../../static/assets/images/faces/face16.jpg" alt="" height="80px">
+                    <td> <img src="{{m.team1.team_logo.url}}" alt="" height="80px" width="80px">
                     <!-- <br> -->
                     <!-- <p style="margin-top: 5px;margin-left: 128px;margin-top: 10px;">CSK  </p> -->
                     </td>   
                     <td > VS</td>
                     <td>
-                        <img src="../../../static/assets/images/faces/face16.jpg" alt="" height="80px">
+                        <img src="{{m.team2.team_logo.url}}" alt="" height="80px" width="80px">
                     <!-- <br>
                     <p style="margin-top: 5px;margin-left: 15px;">CSK</p> -->
                     </td>
-                    <td><a href="" class="btn btn-primary">Watch</a></td>
+                    
+                    <td><input type="submit" name="" class="btn btn-primary" id="">  
+                        <input type="hidden" name="id"  value={{m.id}} id="">
+                </td>
                 </tr>
                 <tr>
-                    <td>CSK(190/7)</td>
+                    <td>{{m.team1.team_name|upper}}</td>
                     <td></td>
-                    <td>RCB (192/9)</td>
+                    <td>{{m.team2.team_name|upper}}</td>
                 </tr>
                 <tr>
-                    <td colspan="3">RCB won by 2 runs</td>
+                    <td colspan="3" style="color: red;">{{m.result|title}}</td>
                 </tr>
                  
             </table>
 
-        </div>{% extends 'Venue/VenueMaster.html' %}
+        </div> 
 
-        {% block content%}
-                    <h3 class="text-danger">Welcome Home</h3>
-        {% endblock %}
+        
         
         
         
 
         
     </div>
-    <div class="row" style="margin-top: 10px;">
-        <div class="col-md-12" style="border: 1px solid red;background-color: cyan;" >
-            <p style="margin-top: 20px; margin-left: 280px;color: red;font-weight: 500; font-size: large;">Tournament name (12/10/2022)</p>
-            <table style="border-spacing: 10px; border-collapse: separate;min-height:   100px;width:800px; margin-left: 150px;"  >
-                <tr>
-                    <td> <img src="../../../static/assets/images/faces/face16.jpg" alt="" height="80px">
-                    <!-- <br> -->
-                    <!-- <p style="margin-top: 5px;margin-left: 128px;margin-top: 10px;">CSK  </p> -->
-                    </td>   
-                    <td > VS</td>
-                    <td>
-                        <img src="../../../static/assets/images/faces/face16.jpg" alt="" height="80px">
-                    <!-- <br>
-                    <p style="margin-top: 5px;margin-left: 15px;">CSK</p> -->
-                    </td>
-                    <td><a href="" class="btn btn-primary">Watch</a></td>
-                </tr>
-                <tr>
-                    <td>CSK</td>
-                    <td></td>
-                    <td>RCB</td>
-                </tr>
-                 
-            </table>
-
-        </div>
-
-        
-    </div>
-    <div class="row" style="margin-top: 10px;">
+</form>
+    {% endfor %}
+    {% comment %} <div class="row" style="margin-top: 10px;">
         <div class="col-md-12" style="border: 1px solid red;background-color: cyan;" >
             <p style="margin-top: 20px; margin-left: 280px;color: red;font-weight: 500; font-size: large;">Tournament name (12/10/2022)</p>
             <table style="border-spacing: 10px; border-collapse: separate;min-height:   100px;width:800px; margin-left: 150px;"  >
@@ -101,7 +80,8 @@
         </div>
 
         
-    </div>
+    </div> {% endcomment %}
+    
      
 </div>
 

@@ -413,15 +413,25 @@
                 <tbody>
                   
                   {% for t in ongoing_tournaments %}
+                  <form action="/SCMS/AdminHome/UpdateStatus" method="POST">
+                    {% csrf_token %}
+                    
                   <tr>
+
                     <td class="font-weight-bold">{{t.tournament_title|title}}</td>
                     <td class="font-weight-bold">{{t.start_date|title}}</td>
                     <td class="font-weight-bold">{{t.start_date|title}}</td>
                     <td class="font-weight-bold" >{{t.venue_id.venue_name|title}}</td>
                     <td class="font-weight-medium">
-                      <div class="badge badge-success">Change Status</div>
+                    <input type="submit" value="Change Status" class="btn btn-primary">
+
+                    </td>
+                    <td>
+                      <input type="hidden" name="tr_id" value="{{t.tournament_id}}">
                     </td>
                   </tr>
+                </form>
+
                   {% endfor %}
                  
                 </tbody>

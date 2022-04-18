@@ -2,6 +2,19 @@
 
 {% block page_content %}
 <div class="container">
+<div class="row" style="margin-top: 40px;">
+    <div class="col-md-2"></div>
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+        
+        <a  href="{% url 'club_management:gen_fixture' %}" value="" class="btn btn-warning name=" id="">Fixture & date</a>
+        <!-- <input type="submit" value="Update Date" class="btn btn-warning" name="" id=""> -->
+        <a class="btn btn-primary"  name="" id="" href="{% url 'club_management:upload_live' %}">Upload Live</a>
+        <a href="/SCMS/AdminHome/MatchStatus" class="btn btn-info" name="" id="">Match Status</a>
+        <a href="/SCMS/AdminHome/TournamentStatus" class="btn btn-danger" name="" id="">Tournament Status</a>
+
+    </div>
+</div>
 
     <div class="row">
         <div class="col-md-12" style="margin-top: 40px;">

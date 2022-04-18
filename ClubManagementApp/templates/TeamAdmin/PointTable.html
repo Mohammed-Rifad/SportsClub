@@ -4,26 +4,49 @@
 <div class="container">
     <div class="row">
         <div class="col-md-12">
-            <h2>Tournament Name</h2>
+            <form action="" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <table style="border-spacing: 20px;border-collapse: separate;">
+                    <tr>
+                        <td class="text-dark h4">Select Tournament</td>
+                        <td><select class="form-control" required name="tr" id="tr" style="min-width: 150px;">
+                                <option value="" disabled selected>Select Tournament</option>
+                                {% for t in tournaments %}
+                                <option value="{{t.tournament_id}}">{{t.tournament_title|title}}</option>
+                                {% endfor %}
+                            </select></td>
+
+                    </tr>
+
+
+                    <tr>
+                        <td></td>
+                        <td><input type="submit" value="View" class="btn btn-primary" name="" id="">
+                        </td>
+
+                    </tr>
+                </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h2>{{tr.tournament_title|title}}</h2>
         </div>
         <div class="col-md-12" style="margin-top: 20px;">
             <table class="table table-hover">
                 <tr>
                     <th>Team</th>
-                    <th>Matches</th>
-                    <th>Win</th>
-                    <th>Loss</th>
-                    <th>Tie</th>
+                     
+                    
                     <th>Points</th>
                 </tr>
+                    {% for i in data %}
                 <tr>
-                    <td>RCB</td>
-                    <td>2</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>0</td>
-                    <td>2</td>
+                     
+                    <td>{{i.team_id.team_name|upper}}</td>
+                    <td>{{i.team_point}}</td> 
                 </tr>
+                {% endfor %}
             </table>
         </div>
     </div> 
