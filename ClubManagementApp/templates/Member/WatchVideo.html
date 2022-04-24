@@ -1,0 +1,75 @@
+{% extends 'Member/MemberMaster.html' %}
+
+{% block content%}
+<div class="container" style="min-height: 300px;">
+    <div class="row">
+        <div class="col-md-12" style="margin-bottom: 40px;">
+            <h2>Watch Video</h2>
+        </div>
+    </div>
+{% if fx.match_video != '' %}
+    <div class="row" style="min-height: 300px;">
+        <div class="col-md-12 h3" style="margin-top: 20px;margin-bottom: 40px;">
+            {{fx.match|upper}}
+        </div>
+        <div class="col-md-6" style="margin-bottom: 30px;">
+            {% if team1 %}
+            <button onclick="vote('{{fx.team1.team_id}}')" style="border: none;background-color: white">   <i class="fa fa-heart " style="color:red;font-size:70px;"></i></button> 
+            {% else %}
+            <button onclick="vote(vote('{{fx.team1.team_id}}'))" style="border: none;background-color: white">  <i class="fa fa-heart " style="font-size:70px;color:red"></i></button> 
+            {% endif %}
+
+            <br>
+            Vote for {{fx.team1.team_name|upper}}
+        </div>
+        <div class="col-md-6">
+            {% if team1 %}
+            <button onclick="vote(vote('{{fx.team2.team_id}}'))" style="border: none;background-color: white">   <i class="fa fa-heart " style="color:red;font-size:70px;"></i></button> 
+            {% else %}
+            <button onclick="vote(vote('{{fx.team2.team_id}}'))" style="border: none;background-color: white">  <i class="fa fa-heart " style="font-size:70px;"></i></button> 
+            {% endif %}
+            <br>
+            Vote for {{fx.team2.team_name|upper}}
+        </div>
+        <div class="col-md-12">
+            
+           <video src="{{fx.match_video.url}}" controls height="500px" width="100%"></video>
+         
+            
+        </div>
+    </div>
+    {% else %}
+    <h1 style="margin-top: 30px;">Match Not Started Streaming Yet....</h1>
+    {% endif %}
+
+
+
+</div>
+
+<script>
+
+function vote(team){
+    $.ajaxSetup({
+        headers: {
+          "X-CSRFToken": '{{csrf_token}}'
+        }})
+        
+    
+        $.ajax({
+                    url:'/SCMS/Member/Vote',
+                    type:'POST',
+                    data:{
+                        fx_id:'{{fx.id}}',
+                        team:team
+                    },
+                    success:function(response){
+                       console.log(response.status)
+                    }
+                    
+            })
+
+
+
+}
+</script>
+{% endblock %}

@@ -2,17 +2,34 @@
 
 {% block page_content %}
 <div class="container">
-    <div class="row">
+    <div class="row" style="margin-top: 40px;margin-bottom: 30px;">
+        <div class="col-md-2"></div>
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            
+            <a  href="{% url 'club_management:gen_fixture' %}" value="" class="btn btn-warning name=" id="">Fixture & date</a>
+            <!-- <input type="submit" value="Update Date" class="btn btn-warning" name="" id=""> -->
+            <a class="btn btn-primary"  name="" id="" href="{% url 'club_management:upload_live' %}">Upload Live</a>
+            <a href="/SCMS/AdminHome/MatchStatus" class="btn btn-info" name="" id="">Match Status</a>
+            <a href="/SCMS/AdminHome/TournamentStatus" class="btn btn-danger" name="" id="">Tournament Status</a>
+    
+        </div>
+    </div>
+    <div class="row " >
         <div class="col-md-4">
 
         </div>
         <h3 class="text-primary" style="margin-top: 30px;margin-bottom: 0px;">Tournament Status</h3>
         <div class="col-md-8"></div>
     </div>
+    <div class="row" >
+        <div class="col-md-10"></div>
+        
+    </div>
     <div class="row" style="margin-top: 60px;">
         <div class="col-md-2" style="margin-top: 60px;">
 
-        </div>
+        </div>x
         <div class="col-md-8">
             <form action="" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
@@ -51,11 +68,16 @@
                 {% comment %} {% endif %} {% endcomment %}
             </form>
         </div>
+        
     </div>
 
     <div class="row">
         <div class="col-md-12">
             {% if matches %}
+            <div class="col-md-6" style="margin-bottom: 20px;"> Tournament Winner : {% if win_team %} <span>{{win_team|upper}} 
+                {% else %} <span>to be decided</span>
+                {% endif %}
+            </span></div>
             <table class="table table-hover">
                 <tr>
                     <th>SL.No</th>

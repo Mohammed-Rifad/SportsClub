@@ -1,3 +1,4 @@
+from asyncio.windows_events import NULL
 import random
 from random import randint
 from traceback import print_tb
@@ -43,6 +44,15 @@ def account_status(mail_recipient,status):
     recipient_list=[mail_recipient,]
     send_mail(subject,message,email_from,recipient_list)
 
+def BookingNumber(tr_id,type):
+     
+    rand=randint(10000,99999)
+    if type=='online':
+        book_no=str(tr_id.venue_id.venue_name)+'ON'+str(rand)
+    else:
+        book_no=str(tr_id.venue_id.venue_name)+'OFF'+str(rand)
+    return book_no
+
 def FixtureGenerate(model_data,count):
     team1=[]
     team2=[]
@@ -67,8 +77,7 @@ def FixtureGenerate(model_data,count):
             else:
                 team2.append(i.team_id.team_name.lower())
                 team2_id.append(i.team_id)
-    print(team1)
-    print(team2)
+    
     for i in range(len(team1)):
         for j in range(i+1,len(team1)):
             match=team1[i]+' vs ' + team1[j]
@@ -117,14 +126,11 @@ def FixtureGenerate(model_data,count):
             fxt_arr1.append(fxt_dict1)
             fxt_dict1={}
     
-    # print('******************************************')
-    # print(fxt_arr1,'jceduedy')
-
-    # print(len(fxt_arr1))
-    # for i in fxt_arr1:
-    #     f=Fixture()
-
-    # final_fixture=fixture1+fixture2+fixture3
+    
+    fxt_arr1.append({'team1':'Team A','team2':'Team B','t1':None,'t2':None,'match':'semi leg1'})
+    fxt_arr1.append({'team1':'Team A','team2':'Team B','t1':None,'t2':None,'match':'semi leg2'})
+    fxt_arr1.append({'team1':'Team A','team2':'Team B','t1':None,'t2':None,'match':'final'})
 
      
     return fxt_arr1
+

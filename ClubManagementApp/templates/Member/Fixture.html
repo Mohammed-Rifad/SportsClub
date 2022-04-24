@@ -1,0 +1,67 @@
+{% extends 'Member/MemberMaster.html' %}
+
+{% block content%}
+<div class="container">
+    {% if fixture %}
+    <div class="row">
+        <div class="col-md-12" style="margin-bottom: 30px;">
+            <h2>Fixture Of {{tournament.tournament_title|title}}</h2>
+        </div>
+    </div>
+ 
+<div class="row" style="min-height: 300px;">
+    <div class="col-md-12" style="margin-bottom: 40px;">
+        <table class="table table-hover">
+            <tr>
+                <th>Sl.No</th>
+                <th>Match</th>
+                <th>Date</th>
+
+            </tr>
+            {% for match in fixture %}
+
+            <form   method="POST">
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{match.match|upper}}</td>
+                {% if match.date == '' %}
+
+
+                <td>Not Assigned</td>
+
+                {% else %}
+                <td>{{match.date}}</td>
+
+                {% endif %}
+                {% if match.date == '' %}
+
+
+                <td>
+
+                     
+                    {% else %}
+                <td>{{match.date}}</td>
+
+                {% endif %}
+
+                {% if match.result == '' %}
+                <td><a href="/SCMS/Member/Booking/{{match.id}}?tr={{tournament.tournament_id}}&venue={{venue.venue_id}}"  class="btn btn-warning" name="ticket" id="">Book ticket now</a></td>
+                <!-- <td><input type="text" name="id" value="{{match.id}}" id=""></td> -->
+           
+                {% else %}
+                <td><input type="submit" value="Watch Highlights" class="btn btn-warning" name="highlight" id=""></td>
+
+                  {% endif %}  
+            </tr>
+            
+        </form>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+{% else %}
+<h2>Fixtures Not Ready Yet...</h2>
+{% endif %}
+</div>
+{% endblock %}
+

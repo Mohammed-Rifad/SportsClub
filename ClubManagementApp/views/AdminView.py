@@ -1,3 +1,4 @@
+from cmath import isfinite
 from re import T
 from time import strftime
 
@@ -200,6 +201,22 @@ def TournamentRequest(request):
     t_data=TournamentDetails.objects.filter(tournament_status="not completed")
     return render(request, 'Admin/TournamentRequest.html',{'t_data':t_data})
 
+def CompletedTr(request):
+    
+    win_team=None
+    tournaments=TournamentDetails.objects.filter(tournament_status='completed')
+    if request.method=='POST':
+        tr=request.POST['tr']
+         
+        matches=Fixture.objects.filter(tournament_id=tr)
+
+        tr_res=TournamentDetails.objects.get(tournament_id=tr)
+        if not tr_res.winner==None:
+            win_team=tr_res.winner.team_name
+
+        return render(request,'Admin/CompletedTr.html' ,{'tournaments':tournaments,'matches':matches,'win_team':win_team})
+    return render(request,'Admin/CompletedTr.html' ,{'tournaments':tournaments,})
+
 def TournamentTeams(request):
     teams=TournamentRegistration.objects.filter(tournament_id=request.GET['id'])
     tr_name=TournamentDetails.objects.get(tournament_id=request.GET['id'])
@@ -309,22 +326,46 @@ def UpdateFixture(request,id):
         dt_dict={}
 
     if request.method=='POST':
-        date=request.POST['dt']
-        match=request.POST['match']
-        t1=request.POST['t1']
-        t2=request.POST['t2']
-        f=request.POST['am/pm']
-        if int(t1)<1:
-            t1='0'+t1
-        if int(t2)<10:
-            t2='0'+t2
-        time=t1+':'+t2 +' '+f
-        print(time)
-        fxt=Fixture.objects.get(id=match)
-        fxt.date=date
-        fxt.time=time
-        fxt.save()
-    return render(request,'Admin/UpdateFixture.html',{'fixtures':fixtures,'tr':dt,'date':dt_arr})
+        if 'btn-leg' in request.POST:
+             date=request.POST['dt']
+             type=request.POST['fxt_type'].lower()
+             t1=request.POST['t1']
+             t2=request.POST['t2']
+             f=request.POST['am/pm']
+             if int(t1)<1:
+                t1='0'+t1
+             if int(t2)<10:
+                t2='0'+t2
+             time=t1+':'+t2 +' '+f
+             if type=='semi leg1':
+                 t='semi leg1'
+             elif type=='semi leg2':
+                 t='semi leg2'
+             else:
+                 t='final'
+                 
+             team1=TeamDetails.objects.get(team_id=request.POST['m1'])
+             team2=TeamDetails.objects.get(team_id=request.POST['m2'])
+             m=team1.team_name.upper() + ' VS '+team2.team_name.upper()
+             Fixture.objects.filter(tournament_id=id,match=type).update(match=m,date=date,time=time,team1=team1,team2=team2)
+
+        else:
+            date=request.POST['dt']
+            match=request.POST['match']
+            t1=request.POST['t1']
+            t2=request.POST['t2']
+            f=request.POST['am/pm']
+            if int(t1)<1:
+                t1='0'+t1
+            if int(t2)<10:
+                t2='0'+t2
+            time=t1+':'+t2 +' '+f
+            print(time)
+            fxt=Fixture.objects.get(id=match)
+            fxt.date=date
+            fxt.time=time
+            fxt.save()
+    return render(request,'Admin/UpdateFixture.html',{'fixtures':fixtures,'tr':dt,'date':dt_arr,'id':id})
     
 def UploadLive(request):
     tournaments=TournamentDetails.objects.filter(tournament_status='not completed')
@@ -359,12 +400,18 @@ def MatchStatus(request):
         tr_reg.team_point+=1
         tr_reg.save()
         fixture=Fixture.objects.get(id=fx)
-
+        is_final=Fixture.objects.all().last()
+        print(is_final)
         fixture.team1_score=score1
         fixture.team2_score=score2
         fixture.result=res
 
         fixture.save()
+        if fixture.id==is_final.id:
+            data=TournamentDetails.objects.get(tournament_id=request.POST['tr'])
+            data.winner=TeamDetails.objects.get(team_id=wonby)
+            data.save()
+
         succ_msg="Updated Succesfully"
         return render(request,'Admin/MatchStatus.html' ,{'tournaments':tournaments,'succ_msg':succ_msg,})
 
@@ -372,16 +419,18 @@ def MatchStatus(request):
 
 
 def TournamentStatus(request):
-     
+    win_team=None
     tournaments=TournamentDetails.objects.filter(tournament_status='not completed')
     if request.method=='POST':
         tr=request.POST['tr']
          
         matches=Fixture.objects.filter(tournament_id=tr)
 
-         
+        tr_res=TournamentDetails.objects.get(tournament_id=tr)
+        if not tr_res.winner==None:
+            win_team=tr_res.winner.team_name
 
-        return render(request,'Admin/TournamentStatus.html' ,{'tournaments':tournaments,'matches':matches,})
+        return render(request,'Admin/TournamentStatus.html' ,{'tournaments':tournaments,'matches':matches,'win_team':win_team})
     return render(request,'Admin/TournamentStatus.html' ,{'tournaments':tournaments,})
 
 def UpdateTrStatus(request):
@@ -397,3 +446,28 @@ def LoadTeam(request):
     fx=Fixture.objects.get(id=request.POST['id'])
      
     return render(request,'Admin/LoadTeam.html',{'t':fx,})
+
+def LoadSemi(request):
+    id=request.POST['tr_id']
+    set1=[]
+    set2=[]
+    count=1
+    data_set=TournamentRegistration.objects.filter(tournament_id=id).order_by('-team_point')[:4]
+    for team in data_set:
+        if count%2==0:
+            set2.append({'team_id':team.team_id,})
+        else:
+           set1.append({'team_id':team.team_id,})
+        count+=1
+    if request.POST['type']=='leg1':
+
+    
+        return render(request,'Admin/LoadSemi1.html',{'set1':set1,})
+    elif request.POST['type']=='leg2':
+        return render(request,'Admin/LoadSemi2.html',{'set2':set2,})
+    else:
+        data_set=TournamentRegistration.objects.filter(tournament_id=id).order_by('-team_point')[:4]
+        
+        return render(request,'Admin/LoadSemi2.html',{'set2':data_set,})
+    
+       

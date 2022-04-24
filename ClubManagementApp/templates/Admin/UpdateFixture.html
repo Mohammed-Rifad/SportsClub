@@ -2,6 +2,19 @@
 
 {% block page_content %}
 <div class="container">
+    <div class="row" style="margin-top: 40px;">
+        <div class="col-md-2"></div>
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            
+            <a  href="{% url 'club_management:gen_fixture' %}" value="" class="btn btn-warning name=" id="">Fixture & date</a>
+            <!-- <input type="submit" value="Update Date" class="btn btn-warning" name="" id=""> -->
+            <a class="btn btn-primary"  name="" id="" href="{% url 'club_management:upload_live' %}">Upload Live</a>
+            <a href="/SCMS/AdminHome/MatchStatus" class="btn btn-info" name="" id="">Match Status</a>
+            <a href="/SCMS/AdminHome/TournamentStatus" class="btn btn-danger" name="" id="">Tournament Status</a>
+    
+        </div>
+    </div>
     <div class="row">
         <div class="col-md-4">
 
@@ -18,14 +31,32 @@
             <form action="" method="POST">
                 {% csrf_token %}
                 <table style="border-spacing: 20px;border-collapse: separate; width: 500px;">
-                    <tr>
+                     
+                   
+                    <tr id="match">
                         <td>Select Match</td>
-                        <td><select name="match" id="" class="form-control">
+                        <td>
+                            <select name="match" id="match" class="form-control">
                                 {% for m in fixtures %}
                                 <option value="{{m.id}}">{{m.match|upper}}</option>
                                 {% endfor %}
                             </select></td>
                     </tr>
+                    <tr id="t1" >
+                        <td style="display: none;" name="m1" id="lbl1">Select Match</td>
+                        <td  >
+                            <select   style="display: none;" name="m1" id="m1" class="form-control">
+                                 
+                            </select></td>
+                    </tr>
+                    <tr   >
+                        <td style="display: none;" id="lbl2">Select Team</td>
+                        <td  >
+                            <select style="display: none;" name="m2"  id="m2" class="form-control">
+                                
+                            </select></td>
+                    </tr>
+                    
                     <tr>
                         <td class="text-dark h4"> Date</td>
                         <td><select class="form-control" name="dt" id="" style="min-width: 170px;">
@@ -46,11 +77,14 @@
                     </tr>
                     <tr>
                         <td></td>
-                        <td><input type="submit" value="Update" class="btn btn-primary" name="" id="">
+                        <td><input type="submit" value="Update" id="btn1" class="btn btn-primary" name="btn-normal" id="">
+                        <input type="submit" style="display: none;" id="btn2" value="Update" class="btn btn-warning" name="btn-leg" id="">
 
-
+</td>
                     </tr>
                 </table>
+                <input type="hidden" name="t_id" value="{{id}}" id="t_id">
+                <input type="text" name="fxt_type" id="fxt_type">
             </form>
         </div>
     </div>
@@ -81,7 +115,7 @@
                     {% endif %}
 
 
-                    <!----->
+                     
                     {% if match.time == '' %}
 
 
@@ -92,7 +126,7 @@
 
                     {% endif %}
 
-                    <!-- <td><input type="text" name="id" value="{{match.id}}" id=""></td> -->
+                   
                 </tr>
 
                 {% endfor %}
@@ -104,25 +138,114 @@
 <script>
 
 
-        $('#btn-date').click(function(){
-            $.ajaxSetup({
+    //     $('#btn-date').click(function(){
+    //         $.ajaxSetup({
+    //     headers: {
+    //       "X-CSRFToken": '{{csrf_token}}'
+    //     }})
+        
+    //         $.ajax({
+    //     url: '/SCMS/AdminHome/Fixture',
+    //     type: 'POST',
+    //     data: {
+    //       dt: $('#dt').val(),
+    //       id:$('#id').val(),
+    //       updated:true
+    //     },
+    //     success:function(response){
+    //         console.log('updated')
+    //     }
+
+    // })
+    //     })
+
+$("#match").change(function(){
+ 
+     
+        if($("#match option:selected").text()=='SEMI LEG1' || $("#match option:selected").text()=='SEMI LEG2' || $("#match option:selected").text()=='FINAL'){
+            
+            var fxt=$("#match option:selected").text()
+             
+            $('#m1').css({
+                'display':'inline'
+            })
+            $('#lbl1').css({
+                'display':'inline'
+            })
+
+            $('#m2').css({
+                'display':'inline'
+            })
+            $('#lbl2').css({
+                'display':'inline'
+            })
+            $('#btn1').css({
+                'display':'none'
+            })
+            $('#btn2').css({
+                'display':'inline'
+            })
+
+            if(fxt=='FINAL'){
+                $.ajaxSetup({
         headers: {
           "X-CSRFToken": '{{csrf_token}}'
         }})
-        alert($('#dt').val())
-            $.ajax({
-        url: '/SCMS/AdminHome/Fixture',
-        type: 'POST',
-        data: {
-          dt: $('#dt').val(),
-          id:$('#id').val(),
-          updated:true
-        },
-        success:function(response){
-            console.log('updated')
-        }
 
-    })
-        })
+            $.ajax({
+                    url:'/SCMS/AdminHome/LoadSemi',
+                    type:'POST',
+                    data:{
+                        tr_id:$("#t_id").val(),
+                        type:'final'
+                    },
+                    success:function(response){
+                       $("#m1").html(response)
+                       $("#m2").html(response)
+                       $('#fxt_type').val(fxt)
+                    }
+                    
+            })
+            }
+            else{
+                $.ajaxSetup({
+        headers: {
+          "X-CSRFToken": '{{csrf_token}}'
+        }})
+
+            $.ajax({
+                    url:'/SCMS/AdminHome/LoadSemi',
+                    type:'POST',
+                    data:{
+                        tr_id:$("#t_id").val(),
+                        type:'leg1'
+                    },
+                    success:function(response){
+                       $("#m1").html(response)
+                      
+                       $('#fxt_type').val(fxt)
+                    }
+                    
+            })
+            $.ajax({
+                    url:'/SCMS/AdminHome/LoadSemi',
+                    type:'POST',
+                    data:{
+                        tr_id:$("#t_id").val(),
+                        type:'leg2'
+                    },
+                    success:function(response){
+                        
+                       $("#m2").html(response)
+
+                       console.log(response)
+                       $('#fxt_type').val(fxt)
+                    }
+                    
+            })
+            }
+           
+        }
+})
 </script>
 {% endblock %}

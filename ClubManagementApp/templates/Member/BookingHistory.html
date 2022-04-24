@@ -1,0 +1,41 @@
+{% extends 'Member/MemberMaster.html' %}
+
+{% block content%}
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h2>Booking History</h2>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 40px;min-height: 200px;">
+                    <div class="col-md-12">
+                      <table class="table table-primary">
+                          <tr>
+                              <th>Booking No</th>
+                              <th>Tournament</th>
+                              <th>Booking Type</th>
+                              <th>Match</th>
+                              <th>Date</th>
+                              <th>Total Amount</th>
+                          </tr>
+                          {% for data in booking_data %}
+                          <form action="{% url 'club_management:watch_video' data.fix_id.id %}" method="POST">
+                              {% csrf_token %}
+                          <tr style="font-size: large;">
+                              <td>{{data.book_number}}</td>
+                              <td>{{data.tournament_id.tournament_title|title}}</td>
+                              <td>{{data.type|title}}</td>
+                              <td>{{data.fix_id.match|upper}}</td>
+                              <td>{{data.tournament_id.start_date}}</td>
+                              <td>Rs {{data.total}}</td>
+                              <td><input type="submit" name="watch" class="btn btn-primary" value="Watch" id=""></td>
+                              <td><input type="hidden" value="{{data.fix_id.id}}" name="id" id=""></td>
+                          </tr>
+                        </form>
+                          {% endfor %}
+                      </table>
+                    </div>
+                </div>
+            </div>
+{% endblock %}
+

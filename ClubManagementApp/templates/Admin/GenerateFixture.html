@@ -2,6 +2,20 @@
 
 {% block page_content %}
 <div class="container">
+    <div class="row" style="margin-top: 40px;margin-bottom: 30px;">
+        <div class="col-md-2"></div>
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+
+            <a href="{% url 'club_management:gen_fixture' %}" value="" class="btn btn-warning name=" id="">Fixture &
+                date</a>
+            <!-- <input type="submit" value="Update Date" class="btn btn-warning" name="" id=""> -->
+            <a class="btn btn-primary" name="" id="" href="{% url 'club_management:upload_live' %}">Upload Live</a>
+            <a href="/SCMS/AdminHome/MatchStatus" class="btn btn-info" name="" id="">Match Status</a>
+            <a href="/SCMS/AdminHome/TournamentStatus" class="btn btn-danger" name="" id="">Tournament Status</a>
+
+        </div>
+    </div>
     <div class="row">
         <div class="col-md-4">
 
@@ -11,33 +25,34 @@
     </div>
     <div class="row" style="margin-top: 60px;">
         <div class="col-md-2" style="margin-top: 60px;">
-            
+
         </div>
         <div class="col-md-8">
             <form action="" method="POST">
                 {% csrf_token %}
-            <table style="border-spacing: 20px;border-collapse: separate;">
-                <tr>
-                    <td class="text-dark h4">Select Tournament</td>
-                   <td><select class="form-control" name="tr" id="" style="min-width: 100px;">
-                       {% for t in tr_data %}
-                    <option value="{{t.tournament_id}}">{{t.tournament_title|title}}</option>
-                    {% endfor %}
-                </select></td>
+                <table style="border-spacing: 20px;border-collapse: separate;">
+                    <tr>
+                        <td class="text-dark h4">Select Tournament</td>
+                        <td><select class="form-control" name="tr" id="" style="min-width: 100px;">
+                                {% for t in tr_data %}
+                                <option value="{{t.tournament_id}}">{{t.tournament_title|title}}</option>
+                                {% endfor %}
+                            </select></td>
 
-                </tr>
-                <tr>
-<td></td>
-                    <td><input type="submit" value="Generate" class="btn btn-primary" name="" id=""> 
-                     <input type="submit" value="Update Date" class="btn btn-warning" name="upd" id=""></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><input type="submit" value="Generate" class="btn btn-primary" name="" id="">
+                            <input type="submit" value="Update Date" class="btn btn-warning" name="upd" id="">
+                        </td>
 
-                </tr>
-            </table>
-        </form>
+                    </tr>
+                </table>
+            </form>
         </div>
     </div>
 
-    
+
     <div class="row">
         <div class="col-md-12" style="margin-bottom: 40px;">
             <table class="table table-hover">
@@ -45,36 +60,36 @@
                     <th>Sl.No</th>
                     <th>Match</th>
                     <th>Date</th>
-                    
+
                 </tr>
                 {% for match in fixture %}
- 
+
                 <tr>
                     <td>{{forloop.counter}}</td>
                     <td>{{match.match|upper}}</td>
-                    {% if match.date == '' %} 
-                   
-                   
+                    {% if match.date == '' %}
+
+
                     <td>Not Assigned</td>
-                    
+
                     {% else %}
-                       <td>{{match.date}}</td> 
-                    
-                       {% endif %}
-                    {% if match.date == '' %} 
-                   
-                   
+                    <td>{{match.date}}</td>
+
+                    {% endif %}
+                    {% if match.date == '' %}
+
+
                     <td>
-                        
+
                         <!-- <a  href="/SCMS/AdminHome/Fixture/{{match.id}}"   value="Assign Date" class="btn btn-primary" name="match_date" id="btn-date">Assign Date</a></td> -->
-                    <!-- <input type="submit" name="assign_dt" value="Assign Date" name="" id=""> -->
-                    {% else %}
-                       <td>{{match.date}}</td> 
-                    
-                       {% endif %}
-                       <!-- <td><input type="text" name="id" value="{{match.id}}" id=""></td> -->
+                        <!-- <input type="submit" name="assign_dt" value="Assign Date" name="" id=""> -->
+                        {% else %}
+                    <td>{{match.date}}</td>
+
+                    {% endif %}
+                    <!-- <td><input type="text" name="id" value="{{match.id}}" id=""></td> -->
                 </tr>
-           
+
                 {% endfor %}
             </table>
         </div>
@@ -82,7 +97,7 @@
 </div>
 
 <script>
-     
+
 
     //     $('#btn-date').click(function(){
     //         $.ajaxSetup({

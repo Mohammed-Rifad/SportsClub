@@ -31,6 +31,8 @@ urlpatterns=[
     path('AdminHome/LoadT',AdminView.LoadTournaments),
     path('AdminHome/LoadTeam',AdminView.LoadTeam),
     path('AdminHome/MatchStatus',AdminView.MatchStatus),
+    path('AdminHome/LoadSemi',AdminView.LoadSemi),
+    path('AdminHome/CompletedTr',AdminView.CompletedTr,name='a_cmpltTr'),
     path('AdminHome/TournamentStatus',AdminView.TournamentStatus),
     path('TeamAdmin/TournamentStatus',TeamView.TournamentStatus),
     path('AdminHome/UpdateStatus',AdminView.UpdateTrStatus),
@@ -42,6 +44,7 @@ urlpatterns=[
     path('TeamHome/Tournaments',TeamView.ViewTournaments,name="ta_view_tournaments"),
     path('TeamHome/TRegistered',TeamView.RegisteredTournaments,name="ta_treg"),
     path('TeamHome/Previous',TeamView.PreviousMatches,name="ta_prev"),
+    path('MemberReg',CommonView.MemberReg,name="member_reg"),
     path('Admin/TrTeams',AdminView.TournamentTeams,name="a_trTeam"),
     path('Admin/ViewTrTeam',AdminView.ViewTournamentPlayers,name="a_viewtrTeam"),
     path('Admin/UpdatePlayer',AdminView.UpdatePlayerStatus,name="a_updpl"),
@@ -63,5 +66,16 @@ urlpatterns=[
     path('VenueHome/AddBlock',VenueView.AddBlock,name="add_block"),
     path('VenueHome/Password',VenueView.ChangePassword,name="va_change_pass"),
     path('VenueHome/VenueReq',VenueView.VenueRequest,name="v_req"),
-    path('VenueHome/Reason',VenueView.RejectReason,name="r_reason")
-]
+    path('VenueHome/Reason',VenueView.RejectReason,name="r_reason"),
+    path('Member/Home',UsersView.MemberHome,name="member_home"),
+    path('Member/RecentTournament',UsersView.LoadRecentTournament,name="member_recent"),
+    path('Member/Fixture/<int:id>',UsersView.LoadFixture,name="member_fixture"),
+    path('Member/Booking/<int:id>',UsersView.BookTicket,name="member_ticket"),
+    path('Member/Checkout/<int:id>',UsersView.Checkout,name="checkout"),
+    path('Member/Proceed',UsersView.CheckoutProceed),
+    path('Member/OnlinePay',UsersView.CheckoutOnline),
+    path('Member/History',UsersView.BookingHistory,name='booking_history'),
+    path('Member/Watch/<int:id>',UsersView.WatchVideo,name='watch_video'),
+    path('Member/Vote',UsersView.Vote )
+
+]   

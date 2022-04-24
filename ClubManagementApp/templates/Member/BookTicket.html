@@ -1,0 +1,175 @@
+{% extends 'Member/MemberMaster.html' %}
+
+{% block content%}
+<div class="container" style="min-height: 400px;">
+    <div class="row">
+        <div class="col-md-4">
+
+        </div>
+        <h2 style="margin-top: 20px;margin-bottom: 0px;">Book Your Ticket</h2>
+        <div class="col-md-8"></div>
+    </div>
+    <div class="row" style="margin-top: 20px;min-height: 20px;">
+        <div class="col-md-2" style="margin-top: 60px;margin-left:130px">
+
+        </div>
+        <div class="col-md-8">
+             
+                <input type="hidden" value="{{tr}}" name="tr" id="">
+                <input type="hidden" name="fx" value="{{fx}}" id="">
+                <table style="border-spacing: 20px;border-collapse: separate;">
+                    <tr>
+                        <td class="text-dark h4">Booking type</td>
+                        <td><select class="form-control" required name="type" id="type">
+                            <option value="online">Online</option>
+                                <option value="offline">Offline</option>
+                              
+                            </select></td>
+
+                    </tr>
+                     
+
+                    
+                    <!-- <input type="text" value="{{block_details.amount}}" name="" id=""> -->
+                </tr>
+
+
+
+
+                    <tr>
+                        <td></td>
+                        <td>
+                            <input id="rzp-button1" type="submit"   name="checkout_proceed"   class="btn btn-warning" value="CheckOut with Razor ">
+                            <!-- <input type="rzp-button1" value="Submit" class="btn btn-primary" name="" id=""> -->
+
+                        </td>
+
+                    </tr>
+                </table>
+
+             
+        </div>
+
+
+
+    </div>
+<div class="row" id="v_details" style="display: none;">
+    <div class="row" id="" style="margin-top: 40px; ">
+        <div class="col-md-10">
+            <h2>Venue Block Details</h2>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 40px;">
+        <div class="col-md-12">
+            <img src="{{venue.venue_pic.url}}" class="img-rounded" height="160px" width="300px" alt="">
+        </div>
+        
+        
+    </div>
+    <div class="row" style="margin-top: 40px;min-height: 300px;">
+        <div class="col-md-12">
+           
+            <table class="table table-striped">
+                <tr>
+                    <th>SL.No</th>
+                    <th>Block</th>
+                    <th>Amount</th>
+                    <th></th>
+                </tr>
+                {% for b in block_details %}
+                <tr style="font-size: large;">
+                    <td>{{forloop.counter}}</td>
+                    <td>{{b.block_title|title}}</td>
+                    <td>Rs {{b.amount}}</td>
+                    <td></td>
+                     
+                    <td><a href="/SCMS/Member/Checkout/{{fx}}?tr={{tr}}&b={{b.id}}&v={{venue.venue_id}}" class="btn btn-danger">Book Now</a></td>
+                    
+
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        
+    </div>
+    </div>
+</div>
+
+<script>
+    $('#type').change(function(){
+        if($('#type option:selected').text()=='Offline')
+        {
+            $('#v_details').css('display','block')
+        }
+
+        else{
+            $('#v_details').css('display','none')
+        }
+       
+    })
+</script>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+
+ 
+
+        
+
+        
+                    
+                    var options = {
+                    
+                        "key": "rzp_test_uDR5CKMGQFhq9N", // Enter the Key ID generated from the Dashboard
+                        "amount":'30000', // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+                        "currency": "INR",
+                        "name": "{{member.m_name|title}}",
+                        "description": "book tickets",
+                        "image": "https://cdn.freelogovectors.net/wp-content/uploads/2020/11/razorpay-logo.png",
+                        "order_id":"{{payment.id}}", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+                        "handler": function (response){
+                            alert("Payment Succcesfull");
+                            window.location.href="/SCMS/Member/OnlinePay?venue={{venue.venue_id}}&tr={{tr}}&fx={{fx}}"
+                        },
+                        "prefill": {
+                            "name": "{{member.m_name|title}}",
+                            "email": "{{member.m_email}}",
+                            "contact": "{{member.m_phno}}"
+                        },
+                        "notes": {
+                            "address": "Razorpay Corporate Office"
+                        },
+                        "theme": {
+                            "color": "#3399cc"
+                        }
+                    };
+                    var rzp1 = new Razorpay(options);
+                    rzp1.on('payment.failed', function (response){
+                            alert("Payment Cancelled");
+                          //   alert(response.error.description);
+                          //   alert(response.error.source);
+                          //   alert(response.error.step);
+                          //   alert(response.error.reason);
+                          //   alert(response.error.metadata.order_id);
+                          //   alert(response.error.metadata.payment_id);
+                    });
+                    document.getElementById('rzp-button1').onclick = function(e){
+                        rzp1.open();
+                        e.preventDefault();
+                    }
+     
+
+
+</script>
+
+<script>
+    $('#num').change(function(){
+    
+        alert('{{block_details.amount}}')
+    amount=parseInt($('#num').val()) * '{{block_details.amount}}'
+    $('#total').val(amount)
+    })
+</script>
+
+{% endblock %}

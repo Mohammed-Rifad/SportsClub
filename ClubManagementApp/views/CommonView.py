@@ -125,6 +125,31 @@ def Login(request):
                         msg="Incorrect UserName or Password"
                         
                         return render(request,'Common/CommonLogin.html',{'form':form,'msg':msg,}) 
+        elif '@' in login_id:
+
+            if form.is_valid():
+                    print('000000000000000000000000000')
+                    login_id=form.cleaned_data['login_id']
+                    login_passwd=form.cleaned_data['login_passwd']
+                    auth_check=MemberDetails.objects.filter(m_email=login_id).exists()
+                    print(auth_check)
+                    if auth_check:
+                        auth_data=MemberDetails.objects.get(m_email=login_id)
+                        auth_passwd=auth_data.verifyPasswd(login_passwd)
+                        if auth_passwd:
+                          
+                            request.session['member_id']=auth_data.m_id
+                             
+                            return redirect("club_management:member_home")
+                            
+                                
+                        else:
+                            msg="Incorrect Password"
+                        return render(request,'Common/CommonLogin.html',{'form':form,'msg':msg,})
+                    else:
+                        msg="Incorrect UserName or Password"
+                        
+                        return render(request,'Common/CommonLogin.html',{'form':form,'msg':msg,}) 
     return render(request,'Common/CommonLogin.html',{'form':form,})
 
 
@@ -203,3 +228,24 @@ def VenueReg(request):
         else:
             print(form.errors)
     return render(request,'Common/VenueRegister.html',{'form':form,})
+
+def MemberReg(request):
+    if request.method=='POST':
+      
+        m_name=request.POST['m_name'].lower()
+        m_email=request.POST['m_email'].lower()
+        m_phno=request.POST['m_phno']
+        m_passwd=request.POST['m_passwd']
+
+        enc_passwd=pbkdf2_sha256.hash(m_passwd,rounds=1000,salt_size=32)
+        do_exist=MemberDetails.objects.filter(m_email=m_email).exists()  
+
+        if not do_exist:
+            member=MemberDetails(m_name=m_name,m_email=m_email,m_phno=m_phno,m_passwd=enc_passwd)
+            member.save()
+            succ_msg="Registered Succesfully"
+            return render(request,'Common/MemberReg.html',{'succ_msg':succ_msg})   
+        else:
+            err_msg="Email Aleady Exist"
+            return render(request,'Common/MemberReg.html',{'err_msg':err_msg})  
+    return render(request,'Common/MemberReg.html')

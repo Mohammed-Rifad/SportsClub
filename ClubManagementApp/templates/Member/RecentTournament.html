@@ -1,0 +1,41 @@
+{% extends 'Member/MemberMaster.html' %}
+
+{% block content%}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Recent Tournaments</h2>
+        </div>
+    </div>
+
+    <div class="row" style="min-height: 300px;">
+        <div class="col-md-12">
+            <form action="" method="POST" class="f1">
+
+                <table style="border-spacing: 10px;border-collapse: separate; margin-top: 20px;"
+                    class="table table-hover">
+                    <tr class="h4 text-center" style="align-items: center;">
+                        <th>Tournament</th>
+                        <th>Start Date</th>
+                        <th>Venue</th>
+                        <th></th>
+
+                    </tr>
+                    {% for t in data %}
+                    <tr style="align-items: center;">
+                        <td>{{t.tournament_title|title}}</td>
+                        <td>{{t.venue_id.venue_name|title}}</td>
+                        <td><a href="{% url 'club_management:member_fixture' t.tournament_id %}">Fixtures</a></td>
+                        <!-- <td><input type="hidden" name="t_id" value="{{t.tournament_id}}" id=""></td> -->
+                    </tr>
+                    {% endfor %}
+                </table>
+
+            </form>
+        </div>
+    </div>
+
+
+
+</div>
+{% endblock %}

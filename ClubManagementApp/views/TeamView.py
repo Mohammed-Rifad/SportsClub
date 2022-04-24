@@ -88,16 +88,9 @@ def ViewPlayer(request,id):
 
 def ViewTournaments(request):
      
-    print(request.session['not'])
+   
     tournament_data=TournamentDetails.objects.filter(tournament_status='not completed')
-    # if 'not' in request.session:
-         
-    #     if request.session['not'] == 1:
-    #         pass
-    #     else:
-    #          request.session['not']=2
-    #     return render(request,'TeamAdmin/ViewTournaments.html',{'tournaments':tournament_data, })
-
+    
     
     
     

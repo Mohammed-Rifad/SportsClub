@@ -1,0 +1,107 @@
+{% extends 'Member/MemberMaster.html' %}
+
+{% block content%}
+                    <div class="container">
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h2>Checkout Now!</h2>
+                            </div>
+                        </div>
+
+                        <div class="row" style="margin-top: 50px;min-height: 200px;">
+                            <div class="col-md-4"></div>
+                            <div class="col-md-8">
+                                <table style="border-spacing: 10px;border-collapse: separate;">
+                                    <tr>
+                                        <td>Select Nos</td>
+                                        <td><input type="number" value="1" required min='1' class="form-control" name="nos" id="nos"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Total Amount</td>
+                                        <td><input type="text"  readonly class="form-control" name="total" id="total"></td>
+                                    </tr>
+                                    <tr>
+                                        <td> </td>
+                                        <td>
+                                            <input id="rzp-button1" onclick="pay()"  type="submit" name="checkout_proceed" style="background-color: orange;width: 130px; " class="btn btn-warning" value="Book Now">
+                                        </td>
+                                        <td><input type="hidden" name="amt" value="{{amount}}" id="amt"></td>
+                                        <td><input type="hidden" value="{{tr}}" id="tr"></td>
+                                        <td><input type="hidden" name="" value="{{fx}}" id="fx"></td>
+                                        <td><input type="hidden" name="" value="{{b.id}}" id="block"></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+                    <script>
+                    //  var amt=parseInt(document.getElementById("amt").value) *100
+                    //  var sell_type=parseInt(document.getElementById("sell_type").value) 
+                    //  var sell=parseInt(document.getElementById("sell").value) 
+                    //  var pid=parseInt(document.getElementById("pid").value) 
+                    //  var addr=parseInt(document.getElementById("shipping_addr").value) 
+                    function pay(){
+
+                        var tot=parseInt($('#total').val()) 
+                    
+                    var options = {
+                    
+                        "key": "rzp_test_uDR5CKMGQFhq9N", // Enter the Key ID generated from the Dashboard
+                        "amount":(parseInt($('#total').val())*100).toString(), // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+                        "currency": "INR",
+                        "name": "{{member.m_name|title}}",
+                        "description": "book tickets",
+                        "image": "https://cdn.freelogovectors.net/wp-content/uploads/2020/11/razorpay-logo.png",
+                        "order_id":"{{payment.id}}", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+                        "handler": function (response){
+                            alert("Payment Succcesfull");
+                            window.location.href="/SCMS/Member/Proceed?tr={{tr}}&f={{fx}}&b={{b.id}}&t="+tot+"&tic="+document.getElementById('nos').value+"&v="+'{{venue}}'
+                        },
+                        "prefill": {
+                            "name": "{{member.m_name|title}}",
+                            "email": "{{member.m_email}}",
+                            "contact": "{{member.m_phno}}"
+                        },
+                        "notes": {
+                            "address": "Razorpay Corporate Office"
+                        },
+                        "theme": {
+                            "color": "#3399cc"
+                        }
+                    };
+                    var rzp1 = new Razorpay(options);
+                    rzp1.on('payment.failed', function (response){
+                            alert("Payment Cancelled");
+                          //   alert(response.error.description);
+                          //   alert(response.error.source);
+                          //   alert(response.error.step);
+                          //   alert(response.error.reason);
+                          //   alert(response.error.metadata.order_id);
+                          //   alert(response.error.metadata.payment_id);
+                    });
+                    document.getElementById('rzp-button1').onclick = function(e){
+                        rzp1.open();
+                        e.preventDefault();
+                    }
+                }
+                    </script>
+     
+     <script>
+        
+        amount=parseInt($('#nos').val()) * parseInt($('#amt').val())
+            $('#total').val(amount)
+        $('#nos').change(function(){
+    
+            amount=parseInt($('#nos').val()) * parseInt($('#amt').val())
+            $('#total').val(amount)
+             
+        })
+    </script>
+    
+    
+{% endblock %}

@@ -43,9 +43,23 @@ class TeamDetails(models.Model):
 
     class Meta:
         db_table="tb_team"
-        
+
     def verifyPasswd(self,raw_passwd):
         return pbkdf2_sha256.verify(raw_passwd,self.team_passwd)
+
+class MemberDetails(models.Model):
+    m_id=models.AutoField(primary_key=True,db_column="m_id")
+    m_name=models.CharField(max_length=50,db_column="m_name")
+    m_email=models.EmailField(max_length=100,db_column="m_mail")
+    m_phno=models.CharField(max_length=10,db_column="m_ph")
+    m_passwd=models.CharField(max_length=120,db_column="m_pswd")
+    
+
+    class Meta:
+        db_table="tb_member"
+
+    def verifyPasswd(self,raw_passwd):
+        return pbkdf2_sha256.verify(raw_passwd,self.m_passwd)  
 
 class PlayerDetails(models.Model):
     player_id=models.AutoField(primary_key=True,db_column="p_id")
@@ -145,8 +159,8 @@ class TournamentPlayers(models.Model):
 
 class Fixture(models.Model):
     tournament_id=models.ForeignKey(TournamentDetails,on_delete=models.CASCADE)
-    team1=models.ForeignKey(TeamDetails,on_delete=models.CASCADE,related_name='team1',null=True)
-    team2=models.ForeignKey(TeamDetails,on_delete=models.CASCADE,related_name='team2',null=True)
+    team1=models.ForeignKey(TeamDetails,on_delete=models.CASCADE,related_name='team1',null=True,default=0)
+    team2=models.ForeignKey(TeamDetails,on_delete=models.CASCADE,related_name='team2',null=True,default=0)
     match=models.CharField(max_length=50)
     date=models.CharField(max_length=20)
     time=models.CharField(max_length=20)
@@ -156,3 +170,26 @@ class Fixture(models.Model):
     match_video=models.FileField('video/',default="")
     class Meta:
         db_table="tb_fixture"
+
+class Booking(models.Model):
+    tournament_id=models.ForeignKey(TournamentDetails,on_delete=models.CASCADE)
+    venue=models.ForeignKey(VenueDetails,on_delete=models.CASCADE)
+    fix_id=models.ForeignKey(Fixture,on_delete=models.CASCADE)
+    book_number=models.CharField(max_length=30,default='')
+    m_id=models.ForeignKey(MemberDetails,on_delete=models.CASCADE)
+    block=models.ForeignKey(BlockDetails,on_delete=models.CASCADE,null=True)
+    type=models.CharField(max_length=20)
+    tickets=models.IntegerField(default=0)
+    total=models.FloatField()
+
+    class Meta:
+        db_table="tb_booking"
+
+
+class Vote(models.Model):
+    fix_id=models.ForeignKey(Fixture,on_delete=models.CASCADE)
+    m_id=models.ForeignKey(MemberDetails,on_delete=models.CASCADE)
+    vote=models.IntegerField()
+
+    class Meta:
+        db_table="tb_vote"
