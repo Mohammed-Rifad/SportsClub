@@ -76,6 +76,7 @@ urlpatterns=[
     path('Member/OnlinePay',UsersView.CheckoutOnline),
     path('Member/History',UsersView.BookingHistory,name='booking_history'),
     path('Member/Watch/<int:id>',UsersView.WatchVideo,name='watch_video'),
-    path('Member/Vote',UsersView.Vote )
+    path('Member/Vote',UsersView.UserVote ),
+    path('Member/Password',UsersView.ChangePassword,name='m_passwd' )
 
 ]   

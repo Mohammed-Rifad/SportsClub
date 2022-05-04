@@ -146,7 +146,7 @@ def AddTournamentPlayers(request,id):
     if request.method=='POST':
 
          
-
+        
         if 'del' in request.POST:
             t_id=request.POST['tid']
             p_id=request.POST['pid']

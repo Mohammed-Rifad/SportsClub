@@ -190,6 +190,6 @@ class Vote(models.Model):
     fix_id=models.ForeignKey(Fixture,on_delete=models.CASCADE)
     m_id=models.ForeignKey(MemberDetails,on_delete=models.CASCADE)
     vote=models.IntegerField()
-
+    team=models.ForeignKey(TeamDetails,on_delete=models.CASCADE,null=True)
     class Meta:
         db_table="tb_vote"

@@ -1,9 +1,10 @@
 from datetime import datetime
+import re
 from threading import current_thread
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 
-from ClubManagementApp.models import Booking, BlockDetails,  Fixture, MemberDetails, TournamentDetails, VenueDetails
+from ClubManagementApp.models import Booking, BlockDetails,  Fixture, MemberDetails, TeamDetails, TournamentDetails, VenueDetails, Vote
 from ClubManagementApp.services import BookingNumber
 
 
@@ -79,16 +80,59 @@ def CheckoutOnline(request):
 
 
 def BookingHistory(request):
-    booking_data = Booking.objects.filter(m_id=request.session['member_id'])
+    booking_data = Booking.objects.filter(m_id=request.session['member_id'],type='online')
     return render(request, 'Member/BookingHistory.html', {'booking_data': booking_data})
 
 
 def WatchVideo(request, id):
     fx = None
+    team_voted=None
     fx = Fixture.objects.get(id=id)
-    
-    return render(request, 'Member/WatchVideo.html', {'fx': fx})
+    try:
+        vote_data=Vote.objects.get(fix_id=id,m_id=request.session['member_id'])
+        team_voted=vote_data.team.team_id
+         
+    except:
+        pass
+    return render(request, 'Member/WatchVideo.html', {'fx': fx,'team_voted':team_voted})
 
-def Vote(request):
+def UserVote(request):
     print(request.POST['fx_id'])
-    return JsonResponse({'response':'hgfh3e'})
+    fixture=Fixture.objects.get(id=request.POST['fx_id'])
+    tr=fixture.tournament_id.tournament_id
+    member=MemberDetails.objects.get(m_id=request.session['member_id'])
+   
+    team=TeamDetails.objects.get(team_id=request.POST['team'])
+    already_voted=Vote.objects.filter(m_id=request.session['member_id'],fix_id=request.POST['fx_id']).exists()
+    if already_voted:
+        Vote.objects.filter(m_id=request.session['member_id'],fix_id=request.POST['fx_id']).update(team=team)
+    else:
+
+        vote=Vote(fix_id=fixture,m_id=member,vote=1,team=team)
+        vote.save()
+    return JsonResponse({'voted_team':team.team_id})
+
+def ChangePassword(request):
+    if request.method=='POST':
+        old_passwd=request.POST['old_passwd']
+        new_passwd=request.POST['new_passwd']
+        conf_passwd=request.POST['conf_passwd']
+        member_data=MemberDetails.objects.get(m_id=request.session['member_id'])
+        if member_data.verifyPasswd(old_passwd):
+            if new_passwd==conf_passwd:
+                if len(new_passwd)<8:
+                    err_msg='Password Should be minimum 8 characters'
+                    return render(request,'Member/ChangePassword.html',{'err_msg':err_msg})
+                else:
+                    member_data.m_passwd=new_passwd
+                    member_data.save()
+                    succ_msg='Password Changed Succesfully'
+                    return render(request,'Member/ChangePassword.html',{'succ_msg':succ_msg})
+            else:
+                print('kdjhe')
+                err_msg='Password Doesn\'t Match'
+                return render(request,'Member/ChangePassword.html',{'err_msg':err_msg})
+        else:
+                err_msg='Wrong Password'
+                return render(request,'Member/ChangePassword.html',{'err_msg':err_msg})
+    return render(request,'Member/ChangePassword.html')
